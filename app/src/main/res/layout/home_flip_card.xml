@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <eu.davidea.flipview.FlipView
+        android:id="@+id/home_flip_view_card"
+        android:layout_height="250dp"
+        android:layout_width="match_parent"
+        android:animateFirstView="true"
+        android:autoStart="true"
+        android:flipInterval="3000"
+        app:animationDuration="100"
+        app:frontLayout="@layout/home_flip_front_layout"
+        app:rearLayout="@layout/home_flip_back_layout"
+        app:frontBackground="@drawable/home_flip_card_front_drawable"
+        app:rearBackground="@drawable/home_flip_back_drawable"
+        />
+
+</LinearLayout>

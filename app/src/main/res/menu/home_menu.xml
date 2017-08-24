@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <item
+        android:id="@+id/menu_home"
+        android:title="Home"
+
+      />
+
+    <item
+        android:id="@+id/menu_news"
+        android:title="News"
+
+        />
+    <item
+        android:id="@+id/menu_enquiry"
+        android:title="Enquiry"/>
+
+
+    <item
+        android:id="@+id/menu_contact_us"
+        android:title="Contact Us"/>
+    <item
+        android:id="@+id/menu_about_us"
+        android:title="About Us"/>
+    <item
+        android:id="@+id/menu_feedback"
+        android:title="Feedback"/>
+    <item
+        android:id="@+id/menu_reviews"
+        android:title="Reviews"/>
+    <item
+        android:id="@+id/menu_cube"
+        android:title="Cube"/>
+    <item
+        android:id="@+id/menu_juggling"
+        android:title="Juggling"/>
+    <item
+        android:id="@+id/menu_handwriting"
+        android:title="Scientific Handwriting"/>
+    <item
+        android:id="@+id/menu_corporate"
+        android:title="Corporate Training"
+        />
+
+
+    <item
+        android:id="@+id/menu_stack"
+        android:title="Speed stacking">
+        <group>
+    <item
+        android:id="@+id/menu_calligraphy"
+        android:title="Calligraphy"/>
+        </group>
+    </item>
+</menu>

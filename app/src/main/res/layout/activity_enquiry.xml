@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_enquiry"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    tools:context="brainstudio.s4pl.com.brainstudio.Enquiry">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:id="@+id/enquiryNameEdit"
+        android:hint="Participant's Name"
+        android:inputType="textCapWords"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:id="@+id/enquiryPhoneEdit"
+
+        android:hint="Phone Number"
+        android:inputType="phone"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:id="@+id/enquiryMailEdit"
+        android:hint="Email id"
+        android:inputType="textEmailAddress"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:id="@+id/enquiryLocationEdit"
+        android:hint="Location"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:id="@+id/enquiryMessageEdit"
+        android:hint="Enquiry"
+        />
+
+</LinearLayout>
