@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="10dp"
     android:layout_margin="3dp"
+
     >
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:id="@+id/eachBranchCardImage"
         android:src="@drawable/background"/>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="right"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eachBranchCardHeading"
+            android:gravity="center"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eachBranchCardDay"
+            android:gravity="bottom|left"
+            android:layout_below="@id/eachBranchCardHeading"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eachBranchCardTime"
+            android:gravity="bottom|right"
+            android:layout_below="@id/eachBranchCardHeading"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eachBranchCardCost"
+            android:layout_below="@id/eachBranchCardDay"/>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

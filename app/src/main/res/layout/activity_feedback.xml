@@ -48,8 +48,15 @@
         android:hint="Phone number"/>
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:id="@+id/feedbackMessage"
         android:gravity="start"
         android:hint="Feedback"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/feedbackButton"
+        android:layout_gravity="bottom"
+        android:enabled="false"
+        android:text="Submit"/>
 </LinearLayout>

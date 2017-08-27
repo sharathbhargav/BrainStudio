@@ -2,6 +2,7 @@ package brainstudio.s4pl.com.brainstudio;
 
 import android.content.Intent;
 
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,11 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.ArrayList;
@@ -50,13 +56,46 @@ public class Home extends AppCompatActivity {
     homeRecyclerAdaptor recyclerAdaptor;
     @BindView(R.id.home_recycler_view)
     RecyclerView recyclerView;
+    DatabaseReference refParent,refBranches;
+    ArrayList<homeListData> centerList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        layoutManager=new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        recyclerView.setLayoutManager(layoutManager);
+        refParent= FirebaseDatabase.getInstance().getReference("centre");
+        refParent.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren())
+                {
+                    homeListData list=new homeListData();
+                    list.name=noteDataSnapshot.child("name").getValue(String.class);
+                    list.address=noteDataSnapshot.child("address").getValue(String.class);
+                    list.img=noteDataSnapshot.child("mainpic").getValue(String.class);
+                    list.phno=noteDataSnapshot.child("phone").getValue(String.class);
+                    list.days=noteDataSnapshot.child("days").getValue(String.class);
+                    list.time=noteDataSnapshot.child("time").getValue(String.class);
+                    centerList.add(list);
+                }
+
+             //   recyclerAdaptor=new homeRecyclerAdaptor();
+             //   recyclerView.setAdapter(recyclerAdaptor);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        recyclerAdaptor=new homeRecyclerAdaptor();
+        recyclerView.setAdapter(recyclerAdaptor);
         final ActionBar actionBar = getSupportActionBar();
        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
@@ -102,6 +141,21 @@ public class Home extends AppCompatActivity {
                         Intent toFeedback=new Intent(getApplicationContext(),feedback.class);
                         startActivity(toFeedback);
                         break;
+                    case R.id.menu_enquiry:
+                        drawer.closeDrawers();
+                        Intent toEnquiry=new Intent(getApplicationContext(),Enquiry.class);
+                        startActivity(toEnquiry);
+                        break;
+                    case R.id.menu_contact_us:
+                        drawer.closeDrawers();
+                        Intent contact=new Intent(getApplicationContext(),ContactUs.class);
+                        startActivity(contact);
+                        break;
+                    case R.id.menu_reviews:
+                        drawer.closeDrawers();
+                        Intent toReview =new Intent(getApplicationContext(),Reviews.class);
+                        startActivity(toReview);
+                        break;
 
                 }
                 return true;
@@ -110,12 +164,7 @@ public class Home extends AppCompatActivity {
 
 
 
-        layoutManager=new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerAdaptor=new homeRecyclerAdaptor();
-        recyclerView.setAdapter(recyclerAdaptor);
 
 
     }
@@ -137,13 +186,23 @@ public class Home extends AppCompatActivity {
         public void onBindViewHolder(homeCardHolder holder, int position) {
             View front=holder.flipView.getFrontLayout();
 
-            TextView t=(TextView) front.findViewById(R.id.home_card_front_name);
+            TextView name=(TextView) front.findViewById(R.id.home_card_front_name);
             ImageView imageView=(ImageView) front.findViewById(R.id.home_card_front_img);
+            TextView phone=(TextView) front.findViewById(R.id.home_card_front_phone);
+            //Glide.with(getApplicationContext())
+            //        .load(centerList.get(position).img)
+            //        .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
+            //        .into(imageView);
+            //name.setText(centerList.get(position).name);
+            //phone.setText(centerList.get(position).phno);
+
+
             Glide.with(getApplicationContext())
                     .load(R.drawable.background)
                     .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
                     .into(imageView);
-            t.setText("Changed");
+            name.setText("sdfsd");
+            phone.setText("dfsfg");
             holder.flipView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,7 +214,7 @@ public class Home extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 3;
+            return 1;
         }
 
         public class homeCardHolder extends RecyclerView.ViewHolder
@@ -184,30 +243,5 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        //if (id == R.id.action_right_menu) {
-            if (drawer.isDrawerOpen(GravityCompat.END)) {
-                drawer.closeDrawer(GravityCompat.END);
-            } else {
-                drawer.openDrawer(GravityCompat.END);
-            }
-          //  return true;
-       // }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

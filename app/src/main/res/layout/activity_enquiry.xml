@@ -7,9 +7,24 @@
     android:orientation="vertical"
 
     tools:context="brainstudio.s4pl.com.brainstudio.Enquiry">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/enquiry_appbar"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/enquiry_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            />
+
+    </android.support.design.widget.AppBarLayout>
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:id="@+id/enquiryNameEdit"
         android:hint="Participant's Name"
         android:inputType="textCapWords"
@@ -19,30 +34,40 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:id="@+id/enquiryPhoneEdit"
-
+        android:layout_margin="5dp"
         android:hint="Phone Number"
         android:inputType="phone"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:id="@+id/enquiryMailEdit"
         android:hint="Email id"
+        android:layout_margin="5dp"
         android:inputType="textEmailAddress"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:id="@+id/enquiryLocationEdit"
         android:hint="Location"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="150dp"
+        android:gravity="start"
         android:id="@+id/enquiryMessageEdit"
         android:hint="Enquiry"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/enquirySubmit"
+        android:layout_gravity="bottom|end"
+        android:text="Submit"/>
 
 </LinearLayout>
