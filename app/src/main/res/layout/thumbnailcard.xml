@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="250dp">
-    <com.google.android.youtube.player.YouTubeThumbnailView
+    android:layout_height="wrap_content">
+    <ImageView
         android:id="@+id/thumbnail"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="180dp"
         android:layout_margin="10dp"
         android:scaleType="centerCrop"
-        android:background="@android:color/black"
 
         />
-
-
-
-
-
-</LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/videoShareButton"
+        android:layout_below="@+id/thumbnail"
+        android:text="Share Video"/>
+</RelativeLayout>

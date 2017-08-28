@@ -6,10 +6,25 @@
     android:layout_height="match_parent"
 
     tools:context="brainstudio.s4pl.com.brainstudio.Reviews">
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/review_appbar"
+        >
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/review_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            />
+
+    </android.support.design.widget.AppBarLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/review_appbar"
         android:id="@+id/reviewRecycler">
 
     </android.support.v7.widget.RecyclerView>

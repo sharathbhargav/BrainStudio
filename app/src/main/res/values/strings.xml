@@ -11,4 +11,10 @@ With the ship sinking, Rose flees Cal and her mother, who has boarded a lifeboat
 After braving several obstacles, Jack and Rose return to the boat deck. The lifeboats have departed and passengers are falling to their deaths as the stern rises out of the water. The ship breaks in half, lifting the stern into the air. Jack and Rose ride it into the ocean and he helps her onto a wooden panel only buoyant enough for one person. He assures her that she will die an old woman, warm in her bed. Jack dies of hypothermia[7] but Rose is saved.
 With Rose hiding from Cal en route, the RMS Carpathia takes the survivors to New York City where Rose gives her name as Rose Dawson. She later finds out Cal committed suicide after losing all his money in the 1929 Wall Street crash.
 Back in the present, Lovett decides to abandon his search after hearing Rose\'s story. Alone on the stern of Keldysh, Rose takes out the Heart of the Ocean — in her possession all along — and drops it into the sea over the wreck site. While she is seemingly asleep or has died in her bed,[8] photos on her dresser depict a life of freedom and adventure inspired by the life she wanted to live with Jack. A young Rose reunites with Jack at the Titanic\'s Grand Staircase, applauded by those who died.</string>
+    <string name="title_activity_programmes">Programmes</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_images__videos_list">Images_VideosList</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

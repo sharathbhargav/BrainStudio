@@ -2,6 +2,7 @@ package brainstudio.s4pl.com.brainstudio;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,8 @@ import butterknife.ButterKnife;
 
 public class feedback extends AppCompatActivity {
 
+    @BindView(R.id.feedback_toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.feedbackSpinnerCentre)
     MaterialSpinner centreSpinner;
@@ -46,6 +49,10 @@ public class feedback extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Enquiry");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         parent= FirebaseDatabase.getInstance().getReference("centre");
@@ -139,5 +146,11 @@ public class feedback extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

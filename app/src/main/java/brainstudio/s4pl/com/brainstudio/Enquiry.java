@@ -31,8 +31,16 @@ public class Enquiry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enquiry);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
         toolbar.setTitle("Enquiry");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

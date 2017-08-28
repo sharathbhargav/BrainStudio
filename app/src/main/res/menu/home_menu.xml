@@ -16,9 +16,11 @@
         android:title="News"
 
         />
+
     <item
-        android:id="@+id/menu_enquiry"
-        android:title="Enquiry"/>
+        android:id="@+id/menu_programmes"
+        android:title="Programmes"/>
+
 
 
     <item
@@ -34,27 +36,8 @@
         android:id="@+id/menu_reviews"
         android:title="Reviews"/>
     <item
-        android:id="@+id/menu_cube"
-        android:title="Cube"/>
-    <item
-        android:id="@+id/menu_juggling"
-        android:title="Juggling"/>
-    <item
-        android:id="@+id/menu_handwriting"
-        android:title="Scientific Handwriting"/>
-    <item
-        android:id="@+id/menu_corporate"
-        android:title="Corporate Training"
-        />
+        android:id="@+id/menu_enquiry"
+        android:title="Enquiry"/>
 
 
-    <item
-        android:id="@+id/menu_stack"
-        android:title="Speed stacking">
-        <group>
-    <item
-        android:id="@+id/menu_calligraphy"
-        android:title="Calligraphy"/>
-        </group>
-    </item>
 </menu>

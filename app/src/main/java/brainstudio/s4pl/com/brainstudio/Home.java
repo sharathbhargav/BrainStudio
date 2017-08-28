@@ -66,36 +66,12 @@ public class Home extends AppCompatActivity {
         ButterKnife.bind(this);
         layoutManager=new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
         recyclerView.setLayoutManager(layoutManager);
-        refParent= FirebaseDatabase.getInstance().getReference("centre");
-        refParent.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren())
-                {
-                    homeListData list=new homeListData();
-                    list.name=noteDataSnapshot.child("name").getValue(String.class);
-                    list.address=noteDataSnapshot.child("address").getValue(String.class);
-                    list.img=noteDataSnapshot.child("mainpic").getValue(String.class);
-                    list.phno=noteDataSnapshot.child("phone").getValue(String.class);
-                    list.days=noteDataSnapshot.child("days").getValue(String.class);
-                    list.time=noteDataSnapshot.child("time").getValue(String.class);
-                    centerList.add(list);
-                }
-
-             //   recyclerAdaptor=new homeRecyclerAdaptor();
-             //   recyclerView.setAdapter(recyclerAdaptor);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
         recyclerAdaptor=new homeRecyclerAdaptor();
         recyclerView.setAdapter(recyclerAdaptor);
+        extractCenterData();
+
+
         final ActionBar actionBar = getSupportActionBar();
        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
@@ -122,18 +98,18 @@ public class Home extends AppCompatActivity {
                 int itemId = item.getItemId();
                 switch (itemId) {
                     case R.id.menu_home:
-                        item.setChecked(true);
+
                         drawer.closeDrawers();
                         break;
                     case R.id.menu_news:
-                        item.setChecked(true);
+
                         drawer.closeDrawers();
-                        Intent news=new Intent(getApplicationContext(),youTubeList.class);
+                        Intent news=new Intent(getApplicationContext(),Images_VideosList.class);
                         startActivity(news);
                         break;
-                    case R.id.menu_cube:
+                    case R.id.menu_programmes:
                         drawer.closeDrawers();
-                        Intent toCube=new Intent(getApplicationContext(),eachProgramCommonActivity.class);
+                        Intent toCube=new Intent(getApplicationContext(),Programmes.class);
                         startActivity(toCube);
                         break;
                     case R.id.menu_feedback:
@@ -156,6 +132,11 @@ public class Home extends AppCompatActivity {
                         Intent toReview =new Intent(getApplicationContext(),Reviews.class);
                         startActivity(toReview);
                         break;
+                    case R.id.menu_about_us:
+                        drawer.closeDrawers();
+                        Intent toAbout=new Intent(getApplicationContext(),AboutUs.class);
+                        startActivity(toAbout);
+                        break;
 
                 }
                 return true;
@@ -166,6 +147,35 @@ public class Home extends AppCompatActivity {
 
 
 
+
+    }
+    void extractCenterData()
+    {
+        refParent= FirebaseDatabase.getInstance().getReference("centre");
+        refParent.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren())
+                {
+                    homeListData list=new homeListData();
+                    list.name=noteDataSnapshot.child("name").getValue(String.class);
+                    list.address=noteDataSnapshot.child("address").getValue(String.class);
+                    list.img=noteDataSnapshot.child("mainpic").getValue(String.class);
+                    list.phno=noteDataSnapshot.child("phone").getValue(String.class);
+                    list.days=noteDataSnapshot.child("days").getValue(String.class);
+                    list.time=noteDataSnapshot.child("time").getValue(String.class);
+                    centerList.add(list);
+                     recyclerAdaptor.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -189,20 +199,15 @@ public class Home extends AppCompatActivity {
             TextView name=(TextView) front.findViewById(R.id.home_card_front_name);
             ImageView imageView=(ImageView) front.findViewById(R.id.home_card_front_img);
             TextView phone=(TextView) front.findViewById(R.id.home_card_front_phone);
-            //Glide.with(getApplicationContext())
-            //        .load(centerList.get(position).img)
-            //        .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
-            //        .into(imageView);
-            //name.setText(centerList.get(position).name);
-            //phone.setText(centerList.get(position).phno);
-
-
+            name.setText(centerList.get(position).name);
+            phone.setText(centerList.get(position).phno);
             Glide.with(getApplicationContext())
-                    .load(R.drawable.background)
+                    .load(centerList.get(position).img)
                     .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
                     .into(imageView);
-            name.setText("sdfsd");
-            phone.setText("dfsfg");
+
+
+
             holder.flipView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -214,7 +219,7 @@ public class Home extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 1;
+            return centerList.size();
         }
 
         public class homeCardHolder extends RecyclerView.ViewHolder
