@@ -2,10 +2,12 @@ package brainstudio.s4pl.com.brainstudio;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,9 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.fenjuly.library.ArrowDownloadButton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +36,8 @@ import com.robertsimoes.shareable.Shareable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,8 +96,10 @@ public class Images_feed extends Fragment {
     @BindView(R.id.imageListRecycler)
     RecyclerView imageList;
     LinearLayoutManager layoutManager;
+    GridLayoutManager gridLayoutManager;
     FirebaseStorage storage;
     ArrayList<String> urlsList=new ArrayList<>( );
+    int progress=0;
 
     ProgressDialog progressBar;
 
@@ -100,9 +109,13 @@ public class Images_feed extends Fragment {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_images_feed, container, false);
         ButterKnife.bind(this,v);
-        layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        imageList.setLayoutManager(layoutManager);
+       //layoutManager = new LinearLayoutManager(getContext());
+       //layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+       //imageList.setLayoutManager(layoutManager);
+
+        gridLayoutManager=new GridLayoutManager(getContext(),2);
+        imageList.setLayoutManager(gridLayoutManager);
+
         storage = FirebaseStorage.getInstance();
         //Log.v("test123",storage.getReferenceFromUrl(urlsList.get(0)).toString());
         progressBar=new ProgressDialog(getActivity());
@@ -111,82 +124,7 @@ public class Images_feed extends Fragment {
         imageList.setAdapter(adapter);
         return v;
     }
-    void sharePhoto(String url)
-    {
-        StorageReference sharePhotoRef = storage.getReferenceFromUrl(url);
 
-        File mediaStorageDir = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Brainstudio");
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists())
-        {
-            if (!mediaStorageDir.mkdirs())
-                return;
-
-        }
-        Log.v("test123",sharePhotoRef.getName()+"\n"+sharePhotoRef.getBucket().toString());
-        final File localFile=new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
-        if(localFile.exists())
-        {
-            progressBar.dismiss();
-            Uri uri=Uri.fromFile(localFile);
-            Shareable imageShare = new Shareable.Builder(getActivity())
-                    .image(uri)
-                    .message("")
-                    .url("")
-                    .build();
-            imageShare.share();
-        }
-        else
-        {
-            sharePhotoRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    progressBar.dismiss();
-                    Uri uri = Uri.fromFile(localFile);
-                    Shareable imageShare = new Shareable.Builder(getActivity())
-                            .image(uri)
-                            .message("")
-                            .url("")
-                            .build();
-                    imageShare.share();
-                }
-            });
-        }
-    }
-    void downloadPhoto(String url)
-    {
-
-        StorageReference sharePhotoRef = storage.getReferenceFromUrl(url);
-        File mediaStorageDir = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Brainstudio");
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists())
-        {
-            if (!mediaStorageDir.mkdirs())
-                return;
-
-        }
-        Log.v("test123",sharePhotoRef.getName()+"\n"+sharePhotoRef.getBucket().toString());
-        final File localFile=new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
-        if(localFile.exists())
-        {
-            Toast.makeText(getContext(), "The Image is previously downloaded and exists in path " + localFile.getPath(), Toast.LENGTH_LONG).show();
-            if (progressBar.isShowing())
-                progressBar.dismiss();
-        }
-        else
-        {
-            sharePhotoRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    progressBar.dismiss();
-                    Toast.makeText(getContext(), "File sucessfully downloaded to " + localFile.getPath(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-    }
     void extractImageUrls(final imageListAdapter adapter)
     {
         DatabaseReference parentRef= FirebaseDatabase.getInstance().getReference("images");
@@ -219,29 +157,27 @@ public class Images_feed extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(imageListHolder holder, final int position)
+        public void onBindViewHolder(final imageListHolder holder, final int position)
         {
             Glide.with(Images_feed.this)
                     .load(urlsList.get(position))
                     .thumbnail(Glide.with(getContext()).load(R.drawable.ring))
-                    .fitCenter()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
                     .into(holder.imageListCardImageView);
-            holder.imageListCardShareButton.setOnClickListener(new View.OnClickListener() {
+
+            holder.imageListCardImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    progressBar.setMessage("Sharing.......");
-                    progressBar.show();
-                    sharePhoto(urlsList.get(position));
+                public void onClick(View v)
+                {
+                    Intent tophotoSliderIntent=new Intent(getContext(),PhotoSliderFullView.class);
+                    tophotoSliderIntent.putExtra("Position",position);
+                    tophotoSliderIntent.putExtra("Urlslist",urlsList);
+                    startActivity(tophotoSliderIntent);
+
                 }
             });
-            holder.imageListDownloadButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    progressBar.setMessage("Downloading.....");
-                    progressBar.show();
-                    downloadPhoto(urlsList.get(position));
-                }
-            });
+
 
 
         }
@@ -254,13 +190,11 @@ public class Images_feed extends Fragment {
         public class imageListHolder extends RecyclerView.ViewHolder
         {
             ImageView imageListCardImageView;
-            Button imageListCardShareButton;
-            Button imageListDownloadButton;
+
             public imageListHolder(View itemView) {
                 super(itemView);
                 imageListCardImageView=(ImageView)itemView.findViewById(R.id.imageListImageView);
-                imageListCardShareButton=(Button)itemView.findViewById(R.id.imageListShareButton);
-                imageListDownloadButton=(Button)itemView.findViewById(R.id.imageListDownloadButton);
+
             }
         }
     }

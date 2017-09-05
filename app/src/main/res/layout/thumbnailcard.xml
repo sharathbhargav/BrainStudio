@@ -1,19 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/thumbnail"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_margin="10dp"
-        android:scaleType="centerCrop"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="5dp">
 
-        />
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/videoShareButton"
-        android:layout_below="@+id/thumbnail"
-        android:text="Share Video"/>
-</RelativeLayout>
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/videoHeading"
+            android:textAlignment="center"
+            android:layout_margin="5dp"
+            android:textAllCaps="true"
+            android:textStyle="bold"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_below="@id/videoHeading"
+            android:id="@+id/thumbNailContainer">
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:clickable="false"/>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:background="@drawable/youtubeplayicon"
+                android:layout_centerInParent="true"
+                android:id="@+id/youtubePlatButton"
+                android:clickable="false"/>
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="#80ff0000">
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/watsapp"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/watsupShare"
+                    android:layout_centerVertical="true"
+                    />
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/facebookshare"
+                    android:id="@+id/facebookShare"
+                   android:layout_above="@id/watsupShare"
+                    android:layout_marginBottom="30dp"
+                    android:layout_centerHorizontal="true"
+                   />
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/fileshareothers"
+                    android:layout_below="@id/watsupShare"
+                    android:id="@+id/shareOthers"
+                    android:layout_marginTop="30dp"/>
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

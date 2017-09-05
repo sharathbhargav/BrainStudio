@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_photo_slider_full_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100"
+        tools:context="brainstudio.s4pl.com.brainstudio.PhotoSliderFullView">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="90">
+           <brainstudio.s4pl.com.brainstudio.HackyViewPager
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:id="@+id/photosliderFullView"
+               android:background="@android:color/black"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:id="@+id/downloadProgressContainer"
+            android:background="#36ff0000">
+
+           <com.fenjuly.library.ArrowDownloadButton
+               android:id="@+id/imageListDownloadButtonFullView"
+              android:layout_centerInParent="true"
+               android:layout_width="150dp"
+               android:layout_height="150dp"
+               android:background="@color/colorPrimary"
+
+               />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:background="#90CAF9">
+        <Button
+            android:layout_width="40dp"
+            android:id="@+id/fullViewOthersShare"
+            android:layout_height="40dp"
+            android:background="@drawable/fileshareothers"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="42dp" />
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/fullViewOthersShare"
+            android:layout_marginStart="60dp"
+            android:background="@drawable/filedownloadpic"
+            android:id="@+id/fullViewDownload" />
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/watsapp"
+            android:layout_toLeftOf="@id/fullViewOthersShare"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="60dp"
+            android:id="@+id/fullViewWatsupShare" />
+
+
+    </RelativeLayout>
+</LinearLayout>
+
+
+
+
+

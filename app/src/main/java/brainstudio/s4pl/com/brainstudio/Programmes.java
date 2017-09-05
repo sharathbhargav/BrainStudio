@@ -1,5 +1,6 @@
 package brainstudio.s4pl.com.brainstudio;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import layout.CommonFragment;
 
 public class Programmes extends AppCompatActivity implements CommonFragment.OnFragmentInteractionListener{
@@ -41,11 +45,17 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
     TabLayout tabLayout;
 
     Toolbar toolbar;
+
+    private int[] tabIcons = {
+            R.drawable.background,
+            R.drawable.background,
+            R.drawable.ic_home_white_36dp
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programmes);
-
+        Fabric.with(this, new Crashlytics());
         toolbar = (Toolbar) findViewById(R.id.each_program_toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,7 +70,9 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[2]);
+        tabLayout.setSelectedTabIndicatorColor(Color.BLUE);
 
     }
 
@@ -154,6 +166,7 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
+
                     return "Cube";
                 case 1:
                     return "Juggling";

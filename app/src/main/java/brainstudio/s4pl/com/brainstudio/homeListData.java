@@ -5,5 +5,6 @@ package brainstudio.s4pl.com.brainstudio;
  */
 
 public class homeListData {
-    String name,img,phno,address,days,time;
+    String name,img,phno,address,days,time,ref;
+    int event=0;
 }

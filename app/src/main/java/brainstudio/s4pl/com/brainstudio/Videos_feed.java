@@ -1,17 +1,22 @@
 package brainstudio.s4pl.com.brainstudio;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +25,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.robertsimoes.shareable.Shareable;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
+
+import java.net.URL;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,9 +66,12 @@ public class Videos_feed extends Fragment {
     }
     @BindView(R.id.videosRecyclerList) RecyclerView youtubeThumbNailRecyclerList;
     LinearLayoutManager layoutManager;
-    String[] videoIds = new String[4];
+    //String[] videoIds = new String[4];
+    ArrayList<String> videoIds=new ArrayList<>();
+    ArrayList<String> videoHeadingsList=new ArrayList<>();
     static String urlPart1 = "http://img.youtube.com/vi/";
     static String urlPart2 = "/0.jpg";
+    static String watchActualUrl="https://www.youtube.com/watch?v=";
     int countVideoIds=0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,8 +97,8 @@ public class Videos_feed extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot noteDataSnapShot:dataSnapshot.getChildren()) {
-                    videoIds[countVideoIds++] = noteDataSnapShot.getValue(String.class);
-                    adapter.notifyDataSetChanged();
+                    videoIds.add( noteDataSnapShot.getValue(String.class));
+                    extractVideoHeadings(noteDataSnapShot.getValue(String.class),adapter);
                 }
             }
 
@@ -93,6 +107,28 @@ public class Videos_feed extends Fragment {
 
             }
         });
+    }
+    void extractVideoHeadings(String videoId,thumbNailAdapter adapter)
+    {
+        String youTubeUrl=watchActualUrl+videoId;
+        try {
+            if (youTubeUrl != null) {
+                URL embededURL = new URL("http://www.youtube.com/oembed?url=" +
+                        youTubeUrl + "&format=json"
+                );
+               // Log.v("test123",embededURL.toString());
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+               // Log.v("test123",new JSONObject(IOUtils.toString(embededURL)).getString("title"));
+                videoHeadingsList.add( new JSONObject(IOUtils.toString(embededURL)).getString("title"));
+                adapter.notifyDataSetChanged();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -126,11 +162,18 @@ public class Videos_feed extends Fragment {
     {
         public class thumbnailHolder extends RecyclerView.ViewHolder {
             ImageView thumbNail;
-            Button shareVideo;
+            Button shareWatsup,shareFacebook,shareOthers,youtubePlayButton;
+            TextView videoHeading;
+            RelativeLayout thumbnailContainer;
             public thumbnailHolder(View itemView) {
                 super(itemView);
-                shareVideo=(Button)itemView.findViewById(R.id.videoShareButton);
+                shareWatsup=(Button)itemView.findViewById(R.id.watsupShare);
+                shareFacebook=(Button)itemView.findViewById(R.id.facebookShare);
+                shareOthers=(Button)itemView.findViewById(R.id.shareOthers);
                 thumbNail=(ImageView)itemView.findViewById(R.id.thumbnail);
+                videoHeading=(TextView)itemView.findViewById(R.id.videoHeading);
+                thumbnailContainer=(RelativeLayout)itemView.findViewById(R.id.thumbNailContainer);
+                youtubePlayButton=(Button)itemView.findViewById(R.id.youtubePlatButton);
             }
         }
         @Override
@@ -140,29 +183,61 @@ public class Videos_feed extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(thumbNailAdapter.thumbnailHolder holder, final int position)
+        public void onBindViewHolder(final thumbNailAdapter.thumbnailHolder holder, final int position)
         {
             Glide.with(Videos_feed.this)
-                    .load(urlPart1+videoIds[position]+urlPart2)
+                    .load(urlPart1+videoIds.get(position)+urlPart2)
                     .thumbnail(Glide.with(getContext()).load(R.drawable.ring))
-                    .fitCenter()
+                    .centerCrop()
                     .into(holder.thumbNail);
 
-            holder.thumbNail.setOnClickListener(new View.OnClickListener() {
+            holder.thumbnailContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(YouTubeStandalonePlayer.createVideoIntent(getActivity(),
-                            "AIzaSyARQOgjxXqo7mKlzJIcQ-q3QsF7nBCJ2PQ",videoIds[position],0,true,true));
+                            "AIzaSyARQOgjxXqo7mKlzJIcQ-q3QsF7nBCJ2PQ",videoIds.get(position),0,true,true));
                 }
             });
-            holder.shareVideo.setOnClickListener(new View.OnClickListener() {
+            holder.videoHeading.setText(videoHeadingsList.get(position));
+            Log.v("test123",videoHeadingsList.get(position));
+            holder.shareWatsup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                    whatsappIntent.setType("text/plain");
+                    whatsappIntent.setPackage("com.whatsapp");
+                    whatsappIntent.putExtra(Intent.EXTRA_TEXT,watchActualUrl+videoIds.get(position));
+                    try
+                    {
+                        getActivity().startActivity(whatsappIntent);
+                    }
+                    catch (android.content.ActivityNotFoundException ex)
+                    {
+
+                    }
+
+                }
+            });
+            holder.shareFacebook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Shareable shareLink=new Shareable.Builder(getActivity().getBaseContext())
                             .message("Brain Studio")
-                            .url("https://www.youtube.com/watch?v="+videoIds[position])
-                            //.socialChannel(Shareable.Builder.ANY)
+                            .url(watchActualUrl+videoIds.get(position))
+                            .socialChannel(Shareable.Builder.FACEBOOK)
                             .build();
+                    shareLink.share();
+                }
+            });
+            holder.shareOthers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Shareable shareLink=new Shareable.Builder(getActivity().getBaseContext())
+                           .message("Brain Studio")
+                           .url(watchActualUrl+videoIds.get(position))
+                           .build();
                     shareLink.share();
                 }
             });
@@ -172,7 +247,7 @@ public class Videos_feed extends Fragment {
 
         @Override
         public int getItemCount() {
-            return videoIds.length;
+            return videoIds.size();
         }
 
 

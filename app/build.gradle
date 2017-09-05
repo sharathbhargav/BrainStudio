@@ -57,6 +57,41 @@ dependencies {
 
     //https://github.com/robertsimoes/Shareable
     compile 'com.github.robertsimoes:Shareable:0.1.0'
+    //https://github.com/luongvo/GmailBackground   gmail
+    compile 'com.github.luongvo:GmailBackground:2.0.1'
+    //https://github.com/julianfalcionelli/MagicForm
+    compile 'julianfalcionelli:MagicForm:1.4'
+
+    //https://android-arsenal.com/details/1/2307   download button
+    compile 'com.github.fenjuly:ArrowDownloadButton:9e15b85e8a'
+    //https://android-arsenal.com/details/1/3066   progress bar
+    compile 'com.github.generic-leo:SimpleArcLoader:bb0cc96c81'
+    //https://android-arsenal.com/details/1/5324    snack bar
+    compile 'com.github.matecode:Snacky:1.0.2'
+    //https://android-arsenal.com/details/1/4663    clock icon
+    compile 'com.github.alxrm:animated-clock-icon:1.0.2'
+
+    //https://android-arsenal.com/details/1/4099
+    compile 'com.github.adrielcafe:AndroidAudioRecorder:0.3.0'
+
+    //https://android-arsenal.com/details/1/3873#!description
+    compile 'pl.bclogic:pulsator4droid:1.0.3'
+
+    //https://android-arsenal.com/details/1/772
+    compile 'com.github.sd6352051:NiftyDialogEffects:1.0.0'
+
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+
+
+    // https://github.com/chrisbanes/PhotoView
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
+
+
+
+    //crashnalytics
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
 }
@@ -64,3 +99,5 @@ dependencies {
 
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'

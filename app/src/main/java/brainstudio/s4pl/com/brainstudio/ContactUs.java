@@ -4,8 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import com.crashlytics.android.Crashlytics;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 
 public class ContactUs extends AppCompatActivity {
 
@@ -17,6 +20,7 @@ public class ContactUs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
         ButterKnife.bind(this);
+        Fabric.with(this, new Crashlytics());
         setSupportActionBar(toolbar);
         toolbar.setTitle("Contact Us");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

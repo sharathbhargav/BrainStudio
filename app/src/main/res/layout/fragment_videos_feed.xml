@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     tools:context="brainstudio.s4pl.com.brainstudio.Videos_feed">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/videosRecyclerList"/>
+        android:id="@+id/videosRecyclerList"
+        android:background="#E0E0E0"/>
 </FrameLayout>

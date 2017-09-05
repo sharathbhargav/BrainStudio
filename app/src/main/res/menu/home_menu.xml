@@ -8,36 +8,44 @@
     <item
         android:id="@+id/menu_home"
         android:title="Home"
+        android:icon="@drawable/ic_home_white_36dp"
 
       />
 
     <item
         android:id="@+id/menu_news"
         android:title="News"
+        android:icon="@drawable/ic_news_white_36dp"
 
         />
 
     <item
         android:id="@+id/menu_programmes"
-        android:title="Programmes"/>
+        android:title="Programmes"
+        />
 
 
 
     <item
         android:id="@+id/menu_contact_us"
-        android:title="Contact Us"/>
+        android:title="Contact Us"
+        android:icon="@drawable/ic_contact_white_36dp"/>
     <item
         android:id="@+id/menu_about_us"
-        android:title="About Us"/>
+        android:title="About Us"
+        android:icon="@drawable/aboutus"/>
     <item
         android:id="@+id/menu_feedback"
-        android:title="Feedback"/>
+        android:title="Feedback"
+        android:icon="@drawable/ic_feedback_white_36dp"/>
     <item
         android:id="@+id/menu_reviews"
-        android:title="Reviews"/>
+        android:title="Reviews"
+        android:icon="@drawable/ic_insert_comment_white_36dp"/>
     <item
         android:id="@+id/menu_enquiry"
-        android:title="Enquiry"/>
+        android:title="Enquiry"
+        android:icon="@drawable/ic_help_white_36dp"/>
 
 
 </menu>

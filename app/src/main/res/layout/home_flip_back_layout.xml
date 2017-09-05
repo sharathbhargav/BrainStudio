@@ -1,19 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="100"
+
         android:orientation="vertical"
         >
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+
             android:text="Address"
+            android:textColor="@color/text1"
+            android:id="@+id/home_card_back_address"
             />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="70"
+            android:id="@+id/home_back_day_layout">
+
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/days_size"
+                android:layout_weight="10"
+                android:id="@+id/home_back_sunday"
+                android:src="@drawable/sunday_red"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/days_size"
+                android:layout_weight="10"
+                android:id="@+id/home_back_monday"
+                android:src="@drawable/monday_red"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/days_size"
+                android:layout_weight="10"
+                android:id="@+id/home_back_tuesday"
+                android:src="@drawable/tuesday_red"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/days_size"
+                android:layout_weight="10"
+                android:id="@+id/home_back_wednesday"
+                android:src="@drawable/wednesday_red"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/days_size"
+                android:layout_weight="10"
+                android:id="@+id/home_back_thursday"
+                android:src="@drawable/thursday_red"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/days_size"
+                android:layout_weight="10"
+                android:id="@+id/home_back_friday"
+                android:src="@drawable/friday_red"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/days_size"
+                android:layout_weight="10"
+                android:id="@+id/home_back_saturday"
+                android:src="@drawable/saturday_red"/>
+
         </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:layout_marginTop="30dp"
+    android:weightSum="100">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="30"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Active hours"/>
+
+<RelativeLayout
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="25"
+    android:layout_marginRight="30dp">
+
+        <rm.com.clocks.ClockImageView
+            android:id="@+id/clock1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            app:hours="16"
+
+            app:minutes="20"
+            app:timeSetDuration="400"
+            app:hasFrame="true"
+
+            app:indeterminateSpeed="2"
+            app:pointerWidth="regular"
+            app:clockColor="@color/colorPrimary"
+            app:frameWidth="regular"
+            />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+    android:layout_alignBottom="@id/clock1"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/home_card_clock1_text"
+        android:background="@color/colorPrimary"
+        android:textColor="#ffffff"
+        android:text="04:25"/>
+
+</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="25"
+        android:layout_marginRight="30dp">
+        <rm.com.clocks.ClockImageView
+            android:id="@+id/clock2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            app:hours="16"
+            app:minutes="20"
+            app:timeSetDuration="400"
+
+            app:indeterminateSpeed="3"
+            app:pointerWidth="regular"
+            app:frameWidth="regular"
+            app:hasFrame="true"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_alignBottom="@id/clock2"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/home_card_clock2_text"
+            android:background="@color/colorPrimary"
+            android:textColor="#ffffff"
+            android:text="04:25"/>
+</RelativeLayout>
+</LinearLayout>
+    </LinearLayout>
     </android.support.v7.widget.CardView>

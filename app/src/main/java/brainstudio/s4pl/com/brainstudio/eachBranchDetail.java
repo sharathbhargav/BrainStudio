@@ -1,5 +1,7 @@
 package brainstudio.s4pl.com.brainstudio;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,12 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andexert.expandablelayout.library.ExpandableLayout;
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 
 public class eachBranchDetail extends AppCompatActivity {
 
@@ -50,6 +55,9 @@ public class eachBranchDetail extends AppCompatActivity {
             ExpandableLayout corporateExpandableLayout;
     @BindView(R.id.eachBranchCalligraphyExpandableLayout)
             ExpandableLayout calligraphyExpandableLayout;
+
+    @BindView(R.id.eachBranchDetailLocationButton)
+    Button location;
     LinearLayoutManager layoutManagerCube;
     RecyclerView cubeRecycle,jugglingRecycle,graphoRecycle,stackRecycle,corporateRecycle,calligraphyRecycle;
     eachBranchRecyclerAdaptor cubeRecyclerAdaptor,jugglingRecycleAdaptor,graphoRecycleAdaptor,stackRecycleAdaptor,corporateRecycleAdaptor,calligraphyRecycleAdaptor;
@@ -58,30 +66,67 @@ public class eachBranchDetail extends AppCompatActivity {
  ArrayList<EachBranchCardCommonClass> cubeList,jugglingList,scientificlist,stackList,corporateList,calligraphyList;
 
 
-    String centre="Uttarahalli";
-    DatabaseReference parent,child,prog;
+    String centre="Uttarahalli",locationString="0,0";
+    DatabaseReference parent,child,prog,loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_branch_detail);
         ButterKnife.bind(this);
+        Fabric.with(this, new Crashlytics());
         collapsingToolbarLayout=(CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle("Demo");
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         rollPagerView.setAdapter(new TestLoopAdapter(rollPagerView));
 
-        parent= FirebaseDatabase.getInstance().getReference("centre");
-        child=parent.child(centre);
+        Intent fromHome=getIntent();
+        String path=fromHome.getStringExtra("path");
+
+
+        Log.v("home","path received=  "+path);
+        child= FirebaseDatabase.getInstance().getReference(path);
+        child.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                collapsingToolbarLayout.setTitle(dataSnapshot.child("name").getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         prog=child.child("programmes");
+        loc=child.child("location");
+        loc.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                locationString=dataSnapshot.getValue(String.class);
+                location.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 
 
-
-
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr="+locationString));
+                startActivity(intent);
+            }
+        });
 
 
 
