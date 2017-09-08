@@ -17,4 +17,103 @@
             />
 
     </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/brainstudio"
+                android:id="@+id/contactusImage"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                android:layout_marginTop="10dp"
+                android:id="@+id/contactPerson"
+                android:layout_below="@id/contactusImage">
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"
+                    android:src="@drawable/contactperson"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="70"
+                    android:text="Mr. Sreenivasa Murthy.K.N."
+                    android:textAllCaps="true"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textSize="15dp"/>
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/contactPerson"
+                android:text="Connect With Us...."
+                android:id="@+id/contactText"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textAllCaps="true"
+                android:layout_marginTop="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:weightSum="90"
+                android:layout_below="@+id/contactText"
+                android:orientation="horizontal"
+                android:id="@+id/connectWithUs">
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="30"
+                    android:id="@+id/facebookContactImage"
+                    android:src="@drawable/facebookshare"
+                    android:layout_gravity="center"
+                    />
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="30"
+                    android:id="@+id/gmailContactImage"
+                    android:src="@drawable/gmail"
+                    android:layout_gravity="center"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="30"
+                    android:id="@+id/websiteContactImage"
+                    android:src="@drawable/websitecontact"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_below="@id/connectWithUs"
+                android:layout_marginTop="15dp"
+                android:id="@+id/callContact"
+                android:layout_centerInParent="true"
+                android:src="@drawable/callus"/>
+
+
+
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+
 </LinearLayout>

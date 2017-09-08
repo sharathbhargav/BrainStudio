@@ -410,6 +410,7 @@ public class eachBranchDetail extends AppCompatActivity {
                     .load(eachList.get(position).img)
                     .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
                     .into(holder.img);
+
             holder.cost.setText(eachList.get(position).cost+"");
 
         }

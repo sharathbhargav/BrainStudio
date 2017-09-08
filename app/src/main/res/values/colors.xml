@@ -5,4 +5,11 @@
     <color name="colorAccent">#0091ea</color>
     <color name="text1">#d3ee2f</color>
     <color name="text2">#123f9f</color>
+    <color name="colorSecondary">#9C27B0</color>
+    <color name="comedyRed">#F44336</color>
+
+    <array name="audioLoader">
+        <item>#ffffff</item>
+        <item>#00fff0</item>
+    </array>
 </resources>

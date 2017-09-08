@@ -6,6 +6,7 @@ package brainstudio.s4pl.com.brainstudio;
 
 public class ReviewData {
     String name,course,centre,message;
+    int audio=0;
 
 
 }

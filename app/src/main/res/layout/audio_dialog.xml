@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    <ProgressBar
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/audioDialogName"
+    android:layout_centerHorizontal="true"/>
+    <com.leo.simplearcloader.SimpleArcLoader
+        android:visibility="visible"
+        android:id="@+id/audioLoader"
+        android:layout_below="@id/audioDialogName"
+        android:layout_width="60dp"
+        custom:arc_colors="@array/audioLoader"
+        android:layout_height="60dp"
+        custom:arc_style="simple_arc"
+        custom:arc_speed="medium"
+        custom:arc_margin="3dp">
+    </com.leo.simplearcloader.SimpleArcLoader>
+    <SeekBar
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar3" />
-</LinearLayout>
+                android:layout_below="@id/audioLoader"
+        android:id="@+id/audioSeekBar" />
+</RelativeLayout>

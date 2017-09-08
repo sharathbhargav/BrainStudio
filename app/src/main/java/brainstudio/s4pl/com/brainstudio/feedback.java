@@ -1,9 +1,13 @@
 package brainstudio.s4pl.com.brainstudio;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -21,11 +25,16 @@ import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
@@ -80,6 +89,8 @@ public class feedback extends AppCompatActivity  {
     EditText phoneEdit;
     @BindView(R.id.feedbackMessage)
     EditText messageEdit;
+    @BindView(R.id.feedbackMessageContainer)
+    TextInputLayout messageContainer;
     @BindView(R.id.nextButton)
             Button next;
 
@@ -93,11 +104,13 @@ public class feedback extends AppCompatActivity  {
     boolean valid=false;
     SimpleArcDialog mDialog;
     int REQUEST_RECORD_AUDIO=111;
+    String filePath ;
+    int  fileType=0;//1 for audio
 
     NiftyDialogBuilder dialogBuilder;
 
 
-
+    StorageReference mainRef;
 
 
 
@@ -123,6 +136,7 @@ public class feedback extends AppCompatActivity  {
         validate();
 
         parent= FirebaseDatabase.getInstance().getReference("centre");
+        mainRef=FirebaseStorage.getInstance().getReferenceFromUrl("gs://brainstudio-a7a21.appspot.com");
         parent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -199,7 +213,9 @@ public class feedback extends AppCompatActivity  {
                     public void onClick(View v) {
                         Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
                         dialogBuilder.dismiss();
+                            fileType=0;
                         messageEdit.setVisibility(View.VISIBLE);
+                        messageContainer.setVisibility(View.VISIBLE);
                         submit.setVisibility(View.VISIBLE);
                     }
                 })
@@ -208,6 +224,8 @@ public class feedback extends AppCompatActivity  {
                     public void onClick(View v) {
                         Toast.makeText(v.getContext(),"i'm btn2",Toast.LENGTH_SHORT).show();
                         dialogBuilder.dismiss();
+                        submit.setVisibility(View.VISIBLE);
+                        fileType=1;
                         startRecording();
                     }
                 });
@@ -235,6 +253,7 @@ public class feedback extends AppCompatActivity  {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialog.show();
                     pushData();
             }
         });
@@ -258,28 +277,64 @@ public class feedback extends AppCompatActivity  {
         centre = centreList.get(centreSpinner.getSelectedIndex());
         Log.v("feed", "centre=" + centre);
         String timeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + "";
-        DatabaseReference each;
+        final DatabaseReference each;
         feedbackRef.child(timeStamp).push();
         each = feedbackRef.child(timeStamp);
 
+        each.child("type").push();
+        if(fileType==1)
+            each.child("type").setValue("audio");
+        else
+            each.child("type").setValue("text");
         each.child("course").push();
-
         each.child("course").setValue(course);
         each.child("centre").push();
-
         each.child("centre").setValue(centre);
         each.child("name").push();
         each.child("name").setValue(nameEdit.getText().toString());
         each.child("phone").push();
         each.child("phone").setValue(phoneEdit.getText().toString());
         each.child("msg").push();
-        each.child("msg").setValue(messageEdit.getText().toString());
         each.child("review").push();
         each.child("review").setValue(0);
-
-        String msg=nameEdit.getText().toString()+"\n"+phoneEdit.getText().toString()+"\n"+messageEdit.getText().toString()+"\n"+course+"\n"
+        if(fileType==0) {
+            each.child("msg").setValue(messageEdit.getText().toString());
+            String msg=nameEdit.getText().toString()+"\n"+phoneEdit.getText().toString()+"\n"+messageEdit.getText().toString()+"\n"+course+"\n"
                     +centre;
-        sendMail(msg);
+            sendMail(msg);
+        }
+
+
+        else {
+        Uri file=Uri.fromFile(new File(filePath));
+        StorageReference subref=mainRef.child(timeStamp);
+
+
+            UploadTask task = subref.putFile(file);
+
+            task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    each.child("msg").setValue(taskSnapshot.getDownloadUrl().toString());
+                    Log.v("store", taskSnapshot.getDownloadUrl().toString());
+
+                    String msg=nameEdit.getText().toString()+"\n"+phoneEdit.getText().toString()+"\n"+messageEdit.getText().toString()+"\n"+course+"\n"
+                            +centre;
+
+
+                     sendMail(msg);
+                }
+            });
+            task.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.v("store", e.toString() + "\n" + e.getMessage());
+                    mDialog.dismiss();
+                }
+            });
+        }
 
     }
 
@@ -293,8 +348,7 @@ public class feedback extends AppCompatActivity  {
                 .withSenderName("Your sender name")
                 .withMailTo("tssuhas18@gmail.com")
                 .withProcessVisibility(false)
-                .withMailCc("cc-email@gmail.com")
-                .withMailBcc("bcc-email@gmail.com")
+
                 .withType(BackgroundMail.TYPE_PLAIN)
                 .withSubject("Feedback received")
 
@@ -375,9 +429,8 @@ public class feedback extends AppCompatActivity  {
                 return;
 
         }
-        String filePath = mediaStorageDir.getPath()+File.separator+"123.wav";
+        filePath = mediaStorageDir.getPath()+File.separator+"123.wav";
         int color = getResources().getColor(R.color.colorPrimaryDark);
-
         AndroidAudioRecorder.with(feedback.this)
                 // Required
                 .setFilePath(filePath)
@@ -411,23 +464,7 @@ public class feedback extends AppCompatActivity  {
                         .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                         //   .setCustomView(R.layout.custom_feedback_dialog,itemView.getContext())       // .setCustomView(View or ResId,context)
 
-                        .setButton1Click(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
-                                dialogBuilder.dismiss();
-                                messageEdit.setVisibility(View.VISIBLE);
-                                submit.setVisibility(View.VISIBLE);
-                            }
-                        })
-                        .setButton2Click(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(v.getContext(),"i'm btn2",Toast.LENGTH_SHORT).show();
-                                dialogBuilder.dismiss();
-                                startRecording();
-                            }
-                        }).show();
+                       .show();
             }
         }
     }

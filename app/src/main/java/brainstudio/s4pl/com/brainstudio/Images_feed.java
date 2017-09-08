@@ -109,9 +109,9 @@ public class Images_feed extends Fragment {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_images_feed, container, false);
         ButterKnife.bind(this,v);
-       //layoutManager = new LinearLayoutManager(getContext());
-       //layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-       //imageList.setLayoutManager(layoutManager);
+        //layoutManager = new LinearLayoutManager(getContext());
+        //layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        //imageList.setLayoutManager(layoutManager);
 
         gridLayoutManager=new GridLayoutManager(getContext(),2);
         imageList.setLayoutManager(gridLayoutManager);

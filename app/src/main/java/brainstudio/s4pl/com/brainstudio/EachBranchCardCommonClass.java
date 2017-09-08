@@ -6,6 +6,6 @@ package brainstudio.s4pl.com.brainstudio;
 
 public class EachBranchCardCommonClass {
 
-    String img,head;
+    String img,head,day,time;
     int cost;
 }

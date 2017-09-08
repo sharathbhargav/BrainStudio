@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +43,7 @@ public class Reviews extends AppCompatActivity {
     @BindView(R.id.reviewRecycler)
     RecyclerView reviewRecycler;
 
+
     LinearLayoutManager layoutManager;
 
     @BindView(R.id.review_toolbar)
@@ -49,6 +51,8 @@ public class Reviews extends AppCompatActivity {
     reviewAdaptor adaptor;
     DatabaseReference feedbackRef;
     ArrayList<ReviewData> reviewDatas=new ArrayList<>();
+    NiftyDialogBuilder dialogBuilder;
+    ViewGroup viewGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,21 @@ public class Reviews extends AppCompatActivity {
 
         layoutManager=new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        dialogBuilder=NiftyDialogBuilder.getInstance(this);
+
+        dialogBuilder
+                .withTitle("Choose your preference")                                  //.withTitle(null)  no title
+                .withTitleColor("#FFFFFF")                                  //def
+                .withDividerColor("#11000000")                              //def
+               // .withMessage("How would you like to give your feedback")                     //.withMessage(null)  no Msg
+               // .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
+                .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)
+                .withIcon(R.drawable.aboutus)
+                .withDuration(700)                                          //def
+                                                  //def gone
+                .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
+                .setCustomView(R.layout.audio_dialog,getBaseContext());       // .setCustomView(View or ResId,context
 
         reviewRecycler.setLayoutManager(layoutManager);
         adaptor=new reviewAdaptor();
@@ -81,6 +100,11 @@ public class Reviews extends AppCompatActivity {
                         temp.course=d.child("course").getValue(String.class);
                         temp.name=d.child("name").getValue(String.class);
                         temp.message=d.child("msg").getValue(String.class);
+                        String type=d.child("type").getValue(String.class);
+                        if(type.equals("audio"))
+                            temp.audio=1;
+                        else
+                            temp.audio=0;
                         reviewDatas.add(temp);
                         adaptor.notifyDataSetChanged();
                     }
@@ -102,9 +126,10 @@ public class Reviews extends AppCompatActivity {
 
 
         MediaPlayer mp;
-        ProgressDialog pd;
+
         int lengthOfAudio=100;
         Runnable runnable;
+
         @Override
         public reviewCardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.review_card,parent,false);
@@ -114,48 +139,123 @@ public class Reviews extends AppCompatActivity {
 
 
         @Override
-        public void onBindViewHolder(final reviewCardHolder holder, int position) {
+        public void onBindViewHolder(final reviewCardHolder holder, final int position) {
 
             holder.message.setText(reviewDatas.get(position).message);
             holder.course.setText(reviewDatas.get(position).course);
             holder.name.setText(reviewDatas.get(position).name);
             holder.centre.setText(reviewDatas.get(position).centre);
 
+            if(reviewDatas.get(position).audio==0)
+                holder.play.setVisibility(View.GONE);
+            else
+                holder.message.setVisibility(View.GONE);
+            holder.eachCardLayout.getHeaderRelativeLayout().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(holder.eachCardLayout.isOpened())
+                        holder.eachCardLayout.hide();
+                    else
+                    {
+
+                                holder.eachCardLayout.show();
+                                Log.v("rec","all done");
+
+
+                    }
+                }
+            });
+
+
+
 
            final Handler handler = new Handler();
+          final  SeekBar seekBar=(SeekBar) dialogBuilder.findViewById(R.id.audioSeekBar);
+            final TextView audioName=(TextView)dialogBuilder.findViewById(R.id.audioDialogName);
+
         runnable =new Runnable() {
 
                 public void run() {
                     // yourMethod();
                     if (mp.isPlaying())
                     {
-                        holder.seekBar.setProgress((int)(((float)mp.getCurrentPosition() / mp.getDuration()) * 100));
-                     //   holder.seekBar.setVisibility(View.GONE);
+                        seekBar.setProgress((int)(((float)mp.getCurrentPosition() / mp.getDuration()) * 100));
 
-                        Log.v("mp","current=="+mp.getCurrentPosition()+"   duration===="+mp.getDuration());
+
                         handler.postDelayed(runnable,1000);
                     }
                 }
             };
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    Log.v("progrees","changed=="+progress+" from user"+fromUser);
+                    if(fromUser) {
+                        handler.removeCallbacks(runnable);
+                        float total = mp.getDuration();
+                        float finalPosition = total * progress / 100;
+                        mp.seekTo((int) (finalPosition));
+                        handler.postDelayed(runnable, 1000);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
             holder.play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dialogBuilder.withEffect(Effectstype.Flipv)                                         //def Effectstype.Slidetop
+                            .withButton1Text("Pause")                                      //def gone
+                            .withButton2Text("Stop and exit");
+                    dialogBuilder.isCancelable(false);
+                    dialogBuilder.setButton1Click(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(holder.playing)
+                            {
+                                dialogBuilder.withButton1Text("Play");
+                                holder.playing=false;
+                                mp.pause();
+                            }
+                            else {
+                                dialogBuilder.withButton1Text("Pause");
+                                holder.playing=true;
+                                mp.start();
+                                handler.postDelayed(runnable,1000);
+                            }
+
+                        }
+                    });
+                    dialogBuilder.setButton2Click(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mp.stop();
+                            dialogBuilder.dismiss();
+                        }
+                    });
+                    dialogBuilder.show();
+
                     try
                     {
-                        pd = new ProgressDialog(Reviews.this);
-
-                        pd.setMessage("Buffering.....");
-                        pd.show();
+                        audioName.setText("Fetching audio");
                         mp = new MediaPlayer();
                         mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
                         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                             @Override
                             public void onPrepared(MediaPlayer mp) {
-                                pd.setMessage("Playing....."+mp.getDuration()/1000);
+                                audioName.setText("Playing");
                                 mp.start();
                                 lengthOfAudio=mp.getDuration();
-                                pd.dismiss();
-                                holder.audioLayout.setVisibility(View.VISIBLE);
+
+
                                 handler.postDelayed(runnable,1000);
 
 
@@ -196,13 +296,14 @@ public class Reviews extends AppCompatActivity {
             ExpandableLayout eachCardLayout;
             TextView name,course,centre,message;
             Button play;
-            LinearLayout audioLayout;
-            SeekBar seekBar;
+
+            boolean playing=true;
 
 
             public reviewCardHolder(View itemView) {
                 super(itemView);
                 eachCardLayout=(ExpandableLayout)itemView.findViewById(R.id.reviewCardExpandableLayout);
+                eachCardLayout.hide();
                 RelativeLayout header=eachCardLayout.getHeaderRelativeLayout();
                 RelativeLayout body=eachCardLayout.getContentRelativeLayout();
                 name=(TextView) header.findViewById(R.id.reviewCardHeaderName);
@@ -210,8 +311,8 @@ public class Reviews extends AppCompatActivity {
                 centre=(TextView)header.findViewById(R.id.reviewCardHeaderCentre);
                 message=(TextView)body.findViewById(R.id.reviewCardBodyMessage);
                 play=(Button)body.findViewById(R.id.streamAudio);
-                audioLayout=(LinearLayout)body.findViewById(R.id.audioLayout);
-                seekBar=(SeekBar)body.findViewById(R.id.audio_play_seek_bar);
+
+
 
             }
         }

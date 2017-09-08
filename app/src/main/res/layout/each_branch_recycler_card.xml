@@ -17,12 +17,15 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_gravity="right"
+
         android:layout_height="match_parent">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eachBranchCardHeading"
             android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
 
             />
         <TextView

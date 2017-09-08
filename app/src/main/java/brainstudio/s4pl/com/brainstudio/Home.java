@@ -391,12 +391,19 @@ public class Home extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent toEachBranch=new Intent(getApplicationContext(),eachBranchDetail.class);
                     String path;
-                    if(centerList.get(position).event==0)
-                        path="centre/"+centerList.get(position).ref;
-                    else
-                        path="events/"+centerList.get(position).ref;
-                    toEachBranch.putExtra("path",path);
-                    startActivity(toEachBranch);
+                    if(centerList.get(position).event==0) {
+                        path = "centre/" + centerList.get(position).ref;
+                        toEachBranch.putExtra("path",path);
+                        startActivity(toEachBranch);
+                    }
+                    else {
+                        Intent toEvent=new Intent(getApplicationContext(),Event_detail.class);
+
+                        path = "events/" + centerList.get(position).ref;
+                        toEvent.putExtra("path",path);
+                        startActivity(toEvent);
+
+                    }
                 }
             });
         }

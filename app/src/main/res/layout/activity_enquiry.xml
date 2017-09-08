@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_enquiry"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="100"
 
     tools:context="brainstudio.s4pl.com.brainstudio.Enquiry">
 
@@ -23,73 +25,186 @@
             />
 
     </android.support.design.widget.AppBarLayout>
-    <EditText
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:layout_margin="5dp"
+
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_person_black_24dp"
+            android:layout_margin="5dp"
+            />
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/MyHintText"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:hint="Participant's Name"
+            android:textColorHint="#EF9A9A"
+            >
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
         android:id="@+id/enquiryNameEdit"
-        android:hint="Participant's Name"
+
+        android:textSize="@dimen/edit_text_size"
+        android:theme="@style/MyEditText"
         android:inputType="textCapWords"
+       />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:layout_margin="5dp"
+
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_call_black_24dp"
+            android:layout_margin="5dp"/>
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginEnd="5dp"
+        app:hintTextAppearance="@style/MyHintText"
+        android:textColorHint="#EF9A9A"
+        android:hint="Phone Number"
+        >
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/enquiryPhoneEdit"
+
+        android:theme="@style/MyEditText"
+        android:textSize="@dimen/edit_text_size"
+
+
+        android:inputType="phone"/>
+    </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:layout_margin="5dp"
+
         android:orientation="horizontal">
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_email_black_24dp"
+            android:layout_margin="5dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="+91"
-            android:shadowColor="#000000"
-            android:shadowDx="-2"
-            android:shadowDy="-2"
-            android:shadowRadius="0.6"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:textSize="15sp"
-
-            android:elevation="5dp"/>
+            app:hintTextAppearance="@style/MyHintText"
+            android:textColorHint="#EF9A9A"
+           >
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/enquiryPhoneEdit"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:hint="Phone Number"
-        android:inputType="phone"/>
-    </LinearLayout>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/enquiryMailEdit"
+        android:theme="@style/MyEditText"
         android:hint="Email id"
         android:layout_margin="5dp"
         android:inputType="textEmailAddress"/>
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="7"
+        android:layout_margin="5dp"
+
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_location_city_black_24dp"
+            android:layout_margin="5dp"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/MyHintText"
+            android:textColorHint="#EF9A9A"
+            >
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:theme="@style/MyEditText"
+
         android:layout_margin="5dp"
         android:id="@+id/enquiryLocationEdit"
         android:hint="Locality"/>
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:layout_margin="5dp"
 
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_help_black_24dp"
+            android:layout_margin="5dp"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/MyHintText"
+            android:textColorHint="#EF9A9A"
+            >
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="match_parent"
         android:gravity="start"
+        android:inputType="textMultiLine"
+        android:theme="@style/MyEditText"
+
+        android:maxLines="5"
         android:id="@+id/enquiryMessageEdit"
         android:hint="Enquiry"
         />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/enquirySubmit"
-        android:layout_gravity="bottom|end"
-        android:text="Submit"/>
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/enquirySubmit"
+                android:layout_gravity="bottom|end"
+                android:text="Submit"/>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

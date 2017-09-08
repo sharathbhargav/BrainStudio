@@ -3,6 +3,7 @@ package brainstudio.s4pl.com.brainstudio;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
         ButterKnife.bind(this);
         position=getIntent().getIntExtra("Position",0);
         urlList=(ArrayList<String >)getIntent().getSerializableExtra("Urlslist");
-         storage= FirebaseStorage.getInstance();
+        storage= FirebaseStorage.getInstance();
         photoSliderFullView.setAdapter(new PhotoSliderAdapter());
         photoSliderFullView.setCurrentItem(position);
         configuration = new ArcConfiguration(getApplicationContext());
@@ -130,7 +131,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
         final File localFile=new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
         if(localFile.exists())
         {
-            Uri uri=Uri.fromFile(localFile);
+            Uri uri= FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider",(localFile));
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             //Target whatsapp:
@@ -159,14 +160,14 @@ public class PhotoSliderFullView extends AppCompatActivity {
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     mDialog.dismiss();
 
-                    Uri uri = Uri.fromFile(localFile);
+                    Uri uri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider",(localFile));
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     //Target whatsapp:
                     shareIntent.setPackage("com.whatsapp");
                     //Add text and then Image URI
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, uri);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM,"Brain Studio");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Brain Studio");
+                    shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
                     shareIntent.setType("image/jpeg");
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -222,7 +223,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
                 public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 *(float) taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                     if(progress!=100.0)
-                    downloadProgress.setProgress((float)progress);
+                        downloadProgress.setProgress((float)progress);
 
                 }
             });
@@ -240,7 +241,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
                     .load(urlList.get(position))
                     .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                   .fitCenter()
+                    .fitCenter()
                     .into(photoView);
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 

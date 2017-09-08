@@ -27,27 +27,66 @@
     <com.jaredrummler.materialspinner.MaterialSpinner
         android:id="@+id/feedbackSpinnerCentre"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:ms_arrow_tint="@color/comedyRed"
+        android:background="@drawable/edit_text_border"/>
 
     <com.jaredrummler.materialspinner.MaterialSpinner
         android:id="@+id/feedbackSpinnerCourse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:ms_arrow_tint="#ff0000"/>
+        app:theme="@style/MyHintText"
+        app:ms_text_color="@color/colorSecondary"
 
+        app:ms_arrow_tint="@color/comedyRed"/>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hintTextAppearance="@style/MyHintText"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+
+        android:textColorHint="#EF9A9A"
+        >
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/feedbackName"
         android:inputType="textCapWords"
         android:hint="Participant's name"/>
+</android.support.design.widget.TextInputLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hintTextAppearance="@style/MyHintText"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+
+        android:textColorHint="#EF9A9A"
+        >
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/feedbackPhoneNumber"
         android:inputType="phone"
         android:hint="Phone number"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hintTextAppearance="@style/MyHintText"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:visibility="gone"
+        android:id="@+id/feedbackMessageContainer"
+        android:textColorHint="#EF9A9A"
+        >
     <EditText
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -55,6 +94,7 @@
         android:visibility="gone"
         android:gravity="start"
         android:hint="Feedback"/>
+    </android.support.design.widget.TextInputLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="50dp"
