@@ -19,6 +19,8 @@
                 android:gravity="center"
                 android:id="@+id/eachProgramHeading"
                 android:textSize="40dp"
+                app:customTypeface="headingBold"
+                tools:ignore="MissingPrefix"
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -28,12 +30,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                app:customTypeface="subHeadingBold"
+                tools:ignore="MissingPrefix"
                 android:id="@+id/eachProgramInfo"
                 />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/eachProgramBenifits"
+                app:customTypeface="subHeadingBold"
+                tools:ignore="MissingPrefix"
                 android:layout_margin="10dp"
                 />
 

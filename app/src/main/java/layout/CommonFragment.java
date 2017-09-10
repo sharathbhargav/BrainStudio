@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import brainstudio.s4pl.com.brainstudio.EachProgramCardData;
 import brainstudio.s4pl.com.brainstudio.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,6 +78,14 @@ public class CommonFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+     //   LayoutInflater inflater = LayoutInflater.from(getContext());
+     //   if (inflater.getFactory() != null) {
+     //       inflater = inflater.cloneInContext(getContext());
+     //   }
+     //  inflater.setFactory(new CustomTypefaceFactory(
+     //          getContext(), CustomTypeface.getInstance(), getActivity()));
+
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

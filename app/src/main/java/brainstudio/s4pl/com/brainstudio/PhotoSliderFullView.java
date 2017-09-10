@@ -1,8 +1,10 @@
 package brainstudio.s4pl.com.brainstudio;
 
 import android.content.Intent;
+import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -28,39 +30,57 @@ import com.google.firebase.storage.StorageReference;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
+import com.neurenor.permissions.PermissionCallback;
+import com.neurenor.permissions.PermissionsHelper;
 import com.robertsimoes.shareable.Shareable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.mateware.snacky.Snacky;
+import de.mateware.snacky.SnackyUtils;
+
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.Manifest.permission_group.STORAGE;
 
 public class PhotoSliderFullView extends AppCompatActivity {
-    @BindView(R.id.photosliderFullView) HackyViewPager photoSliderFullView;
-    @BindView(R.id.imageListDownloadButtonFullView)ArrowDownloadButton downloadProgress;
-    @BindView(R.id.fullViewDownload)Button downloadButton;
-    @BindView(R.id.fullViewWatsupShare)Button watsupShareButton;
-    @BindView(R.id.fullViewOthersShare)Button otherShareButton;
-    @BindView(R.id.downloadProgressContainer)RelativeLayout progressContainer;
+    @BindView(R.id.photosliderFullView)
+    HackyViewPager photoSliderFullView;
+    @BindView(R.id.imageListDownloadButtonFullView)
+    ArrowDownloadButton downloadProgress;
+    @BindView(R.id.fullViewDownload)
+    Button downloadButton;
+    @BindView(R.id.fullViewWatsupShare)
+    Button watsupShareButton;
+    @BindView(R.id.fullViewOthersShare)
+    Button otherShareButton;
+    @BindView(R.id.downloadProgressContainer)
+    RelativeLayout progressContainer;
     int position;
-    public int progress=0;
+    public int progress = 0;
     ArrayList<String> urlList;
     FirebaseStorage storage;
     SimpleArcDialog mDialog;
     ArcConfiguration configuration;
+    PermissionsHelper helper;
+    boolean result = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_slider_full_view);
         ButterKnife.bind(this);
-        position=getIntent().getIntExtra("Position",0);
-        urlList=(ArrayList<String >)getIntent().getSerializableExtra("Urlslist");
-        storage= FirebaseStorage.getInstance();
+        helper = new PermissionsHelper(PhotoSliderFullView.this);
+        position = getIntent().getIntExtra("Position", 0);
+        urlList = (ArrayList<String>) getIntent().getSerializableExtra("Urlslist");
+        storage = FirebaseStorage.getInstance();
         photoSliderFullView.setAdapter(new PhotoSliderAdapter());
         photoSliderFullView.setCurrentItem(position);
         configuration = new ArcConfiguration(getApplicationContext());
@@ -70,34 +90,40 @@ public class PhotoSliderFullView extends AppCompatActivity {
         mDialog.setConfiguration(configuration);
 
 
+
+
+
     }
 
-    void sharePhoto(String url)
-    {
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        /**
+         * helper's onRequestPermissionsResult must be called from activity.
+         */
+        helper.onRequestPermissionsResult(permissions, grantResults);
+    }
+
+    void sharePhoto(String url) {
         StorageReference sharePhotoRef = storage.getReferenceFromUrl(url);
 
         File mediaStorageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Brainstudio");
-        if (!mediaStorageDir.exists())
-        {
+        if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs())
                 return;
 
         }
-        Log.v("test123",sharePhotoRef.getName()+"\n"+sharePhotoRef.getBucket().toString());
-        final File localFile=new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
-        if(localFile.exists())
-        {
-            Uri uri=Uri.fromFile(localFile);
+        Log.v("test123", sharePhotoRef.getName() + "\n" + sharePhotoRef.getBucket().toString());
+        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
+        if (localFile.exists()) {
+            Uri uri = Uri.fromFile(localFile);
             Shareable imageShare = new Shareable.Builder(PhotoSliderFullView.this)
                     .image(uri)
                     .message("")
                     .url("")
                     .build();
             imageShare.share();
-        }
-        else
-        {
+        } else {
             mDialog.show();
             sharePhotoRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
@@ -116,23 +142,20 @@ public class PhotoSliderFullView extends AppCompatActivity {
         }
     }
 
-    void sharePhotoWatsup(String url)
-    {
+    void sharePhotoWatsup(String url) {
         StorageReference sharePhotoRef = storage.getReferenceFromUrl(url);
 
         File mediaStorageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Brainstudio");
-        if (!mediaStorageDir.exists())
-        {
+        if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs())
                 return;
 
         }
-        Log.v("test123",sharePhotoRef.getName()+"\n"+sharePhotoRef.getBucket().toString());
-        final File localFile=new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
-        if(localFile.exists())
-        {
-            Uri uri= FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider",(localFile));
+        Log.v("test123", sharePhotoRef.getName() + "\n" + sharePhotoRef.getBucket().toString());
+        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
+        if (localFile.exists()) {
+            Uri uri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", (localFile));
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             //Target whatsapp:
@@ -143,41 +166,33 @@ public class PhotoSliderFullView extends AppCompatActivity {
             shareIntent.setType("image/jpeg");
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            try
-            {
+            try {
                 startActivity(shareIntent);
-            }
-            catch (android.content.ActivityNotFoundException ex)
-            {
+            } catch (android.content.ActivityNotFoundException ex) {
 
             }
 
-        }
-        else
-        {
+        } else {
             mDialog.show();
             sharePhotoRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     mDialog.dismiss();
 
-                    Uri uri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider",(localFile));
+                    Uri uri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", (localFile));
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     //Target whatsapp:
                     shareIntent.setPackage("com.whatsapp");
                     //Add text and then Image URI
                     shareIntent.putExtra(Intent.EXTRA_TEXT, "Brain Studio");
-                    shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
                     shareIntent.setType("image/jpeg");
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                    try
-                    {
+                    try {
                         startActivity(shareIntent);
-                    }
-                    catch (android.content.ActivityNotFoundException ex)
-                    {
+                    } catch (android.content.ActivityNotFoundException ex) {
 
                     }
 
@@ -187,22 +202,19 @@ public class PhotoSliderFullView extends AppCompatActivity {
 
     }
 
-    void downloadPhoto(String url)
-    {
+    void downloadPhoto(String url) {
 
         StorageReference sharePhotoRef = storage.getReferenceFromUrl(url);
         File mediaStorageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Brainstudio");
-        if (!mediaStorageDir.exists())
-        {
+        if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs())
                 return;
 
         }
-        Log.v("test123",sharePhotoRef.getName()+"\n"+sharePhotoRef.getBucket().toString());
-        final File localFile=new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
-        if(localFile.exists())
-        {
+        Log.v("test123", sharePhotoRef.getName() + "\n" + sharePhotoRef.getBucket().toString());
+        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
+        if (localFile.exists()) {
             Snacky.builder()
                     .setActivty(PhotoSliderFullView.this)
                     .setText("The Image is previously downloaded and exists in path " + localFile.getPath())
@@ -210,12 +222,10 @@ public class PhotoSliderFullView extends AppCompatActivity {
                     .info()
                     .show();
 
-        }
-        else
-        {
+        } else {
             progressContainer.setVisibility(View.VISIBLE);
             downloadProgress.startAnimating();
-            FileDownloadTask task=sharePhotoRef.getFile(localFile);
+            FileDownloadTask task = sharePhotoRef.getFile(localFile);
             task.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -233,9 +243,9 @@ public class PhotoSliderFullView extends AppCompatActivity {
             task.addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0 *(float) taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                    if(progress!=100.0)
-                        downloadProgress.setProgress((float)progress);
+                    double progress = (100.0 * (float) taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    if (progress != 100.0)
+                        downloadProgress.setProgress((float) progress);
 
                 }
             });
@@ -243,6 +253,18 @@ public class PhotoSliderFullView extends AppCompatActivity {
         }
 
     }
+    void commonSnackyBar()
+    {
+        Snacky.builder()
+                .setActivty(PhotoSliderFullView.this)
+                .setText("Permission required to continue" )
+                .setDuration(Snacky.LENGTH_LONG)
+                .error()
+                .show();
+    }
+
+
+
     public class PhotoSliderAdapter extends PagerAdapter
     {
 
@@ -261,7 +283,30 @@ public class PhotoSliderFullView extends AppCompatActivity {
             downloadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    downloadPhoto(urlList.get(position));
+                    if (helper.isPermissionGranted(WRITE_EXTERNAL_STORAGE))
+                        downloadPhoto(urlList.get(position));
+                    else {
+                        helper.requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
+                            @Override
+                            public void onResponseReceived(HashMap<String, PermissionsHelper.PermissionGrant> mapPermissionGrants) {
+                                PermissionsHelper.PermissionGrant permissionGrant = mapPermissionGrants
+                                        .get(WRITE_EXTERNAL_STORAGE);
+                                switch (permissionGrant) {
+                                    case GRANTED:
+                                        downloadPhoto(urlList.get(position));
+                                        break;
+                                    case DENIED:
+                                        commonSnackyBar();
+                                        break;
+                                    case NEVERSHOW:
+                                        commonSnackyBar();
+                                        break;
+
+
+                                }
+                            }
+                        });
+                    }
                 }
             });
 
@@ -270,14 +315,65 @@ public class PhotoSliderFullView extends AppCompatActivity {
             otherShareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sharePhoto(urlList.get(position));
+
+
+                    if (helper.isPermissionGranted(WRITE_EXTERNAL_STORAGE))
+                        sharePhoto(urlList.get(position));
+                    else {
+                        helper.requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
+                            @Override
+                            public void onResponseReceived(HashMap<String, PermissionsHelper.PermissionGrant> mapPermissionGrants) {
+                                PermissionsHelper.PermissionGrant permissionGrant = mapPermissionGrants
+                                        .get(WRITE_EXTERNAL_STORAGE);
+                                switch (permissionGrant) {
+                                    case GRANTED:
+                                        sharePhoto(urlList.get(position));
+                                        break;
+                                    case DENIED:
+                                        commonSnackyBar();
+                                        break;
+                                    case NEVERSHOW:
+                                        commonSnackyBar();
+                                        break;
+
+
+                                }
+                            }
+                        });
+                    }
                 }
             });
+
+
 
             watsupShareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sharePhotoWatsup(urlList.get(position));
+
+                    if (helper.isPermissionGranted(WRITE_EXTERNAL_STORAGE))
+                        sharePhotoWatsup(urlList.get(position));
+                    else {
+                        helper.requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
+                            @Override
+                            public void onResponseReceived(HashMap<String, PermissionsHelper.PermissionGrant> mapPermissionGrants) {
+                                PermissionsHelper.PermissionGrant permissionGrant = mapPermissionGrants
+                                        .get(WRITE_EXTERNAL_STORAGE);
+                                switch (permissionGrant) {
+                                    case GRANTED:
+                                        sharePhotoWatsup(urlList.get(position));
+                                        break;
+                                    case DENIED:
+                                        commonSnackyBar();
+                                        break;
+                                    case NEVERSHOW:
+                                        commonSnackyBar();
+                                        break;
+
+
+                                }
+                            }
+                        });
+                    }
                 }
             });
 

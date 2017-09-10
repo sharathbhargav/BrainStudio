@@ -89,6 +89,11 @@ dependencies {
     //https://android-arsenal.com/details/1/889  fonts
     compile 'cat.ppicas.customtypeface:library:2.0.0'
 
+
+
+    //https://android-arsenal.com/details/1/5404     permissions
+    compile 'com.neurenor:permission-helper:1.0.1'
+
     //crashnalytics
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;

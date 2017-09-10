@@ -20,6 +20,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
+
 public class Images_VideosList extends AppCompatActivity implements Videos_feed.OnFragmentInteractionListener,Images_feed.OnFragmentInteractionListener {
 
     /**
@@ -41,6 +44,8 @@ public class Images_VideosList extends AppCompatActivity implements Videos_feed.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images__videos_list);
 

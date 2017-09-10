@@ -1,6 +1,7 @@
 package brainstudio.s4pl.com.brainstudio;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
+import com.leo.simplearcloader.ArcConfiguration;
+import com.leo.simplearcloader.SimpleArcDialog;
+import com.leo.simplearcloader.SimpleArcLoader;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,10 +57,15 @@ public class Event_detail extends AppCompatActivity {
     Button register;
     String phone;
 
-
+    TestLoopAdapter testLoopAdapter;
+    ArrayList<String> picSlide=new ArrayList<>();
 
     DatabaseReference parent;
     String timeString;
+    SimpleArcDialog mDialog;
+
+
+    String registerString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +78,21 @@ public class Event_detail extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        rollPagerView.setAdapter(new TestLoopAdapter(rollPagerView));
+
+        testLoopAdapter=new TestLoopAdapter(rollPagerView);
+        mDialog = new SimpleArcDialog(this);
+
+        ArcConfiguration configuration = new ArcConfiguration(getApplicationContext());
+        configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
+        configuration.setText("Please wait..");
+        mDialog.setConfiguration(configuration);
 
         Intent fromHome=getIntent();
         String path=fromHome.getStringExtra("path");
         Log.v("detail","received path=="+path);
         parent= FirebaseDatabase.getInstance().getReference(path);
         Log.v("detail",parent.toString());
+        mDialog.show();
         parent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -81,7 +100,7 @@ public class Event_detail extends AppCompatActivity {
 
                 days.setText(dataSnapshot.child("days").getValue(String.class));
                 venue.setText(dataSnapshot.child("address").getValue(String.class));
-
+                collapsingToolbarLayout.setTitle(dataSnapshot.child("name").getValue(String.class));
                 final String[] time1=dataSnapshot.child("time").getValue(String.class).split(":");
                 String t1,t2;
                 int t11=Integer.parseInt(time1[0]);
@@ -100,6 +119,16 @@ public class Event_detail extends AppCompatActivity {
                 description.setText(dataSnapshot.child("description").getValue(String.class));
                 phone=dataSnapshot.child("phone").getValue(String.class);
                 register.setEnabled(true);
+                mDialog.dismiss();
+
+
+                registerString=dataSnapshot.child("register").getValue(String.class);
+                DataSnapshot pic=dataSnapshot.child("picslide");
+                for(DataSnapshot p1:pic.getChildren())
+                {
+                    picSlide.add(p1.getValue(String.class));
+                    testLoopAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -108,6 +137,17 @@ public class Event_detail extends AppCompatActivity {
             }
         });
 
+        rollPagerView.setAdapter(testLoopAdapter);
+
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(registerString));
+                startActivity(i);
+            }
+        });
 
 
 
@@ -126,8 +166,8 @@ public class Event_detail extends AppCompatActivity {
             ImageView view = new ImageView(container.getContext());
 
             Glide.with(getApplicationContext())
-                    .load(R.drawable.background)
-                    //.placeholder(R.drawable.nogut)
+                    .load(picSlide.get(position))
+                    .placeholder(R.drawable.brainstudio)
 
                     .centerCrop()
                     .into(view);
@@ -140,7 +180,7 @@ public class Event_detail extends AppCompatActivity {
 
         @Override
         public int getRealCount() {
-            return 2;
+            return picSlide.size();
         }
     }
     @Override

@@ -31,6 +31,8 @@ import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
 
+import junit.framework.Test;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -70,11 +72,11 @@ public class eachBranchDetail extends AppCompatActivity {
     init cubeInit,jugglingInit,graphoInit,stackInit,corporateInit,calligraphyInit;
  ArrayList<EachBranchCardCommonClass> cubeList,jugglingList,scientificlist,stackList,corporateList,calligraphyList;
 
-
+ArrayList<String> picSlide=new ArrayList<>();
     String centre="Uttarahalli",locationString="0,0";
     DatabaseReference parent,child,prog,loc;
     String dayString,timeString;
-
+    TestLoopAdapter testLoopAdapter;
 
     SimpleArcDialog mDialog;
 
@@ -91,12 +93,12 @@ public class eachBranchDetail extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        rollPagerView.setAdapter(new TestLoopAdapter(rollPagerView));
+
 
         Intent fromHome=getIntent();
         String path=fromHome.getStringExtra("path");
 
-
+        testLoopAdapter=new TestLoopAdapter(rollPagerView);
 
         mDialog = new SimpleArcDialog(this);
 
@@ -134,6 +136,15 @@ public class eachBranchDetail extends AppCompatActivity {
                     t2=t12+":"+time[3]+" am";
                 timeString=t1+"-"+t2;
                 dayString=dataSnapshot.child("days").getValue(String.class);
+
+
+
+                DataSnapshot pic=dataSnapshot.child("picslide");
+                for(DataSnapshot p1:pic.getChildren())
+                {
+                    picSlide.add(p1.getValue(String.class));
+                    testLoopAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -142,6 +153,7 @@ public class eachBranchDetail extends AppCompatActivity {
             }
         });
 
+        rollPagerView.setAdapter(testLoopAdapter);
         prog=child.child("programmes");
         loc=child.child("location");
         loc.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -405,8 +417,8 @@ public class eachBranchDetail extends AppCompatActivity {
             ImageView view = new ImageView(container.getContext());
 
             Glide.with(getApplicationContext())
-                    .load(R.drawable.background)
-                    //.placeholder(R.drawable.nogut)
+                    .load(picSlide.get(position))
+                    .placeholder(R.drawable.brainstudio)
 
                     .centerCrop()
                     .into(view);
@@ -419,7 +431,7 @@ public class eachBranchDetail extends AppCompatActivity {
 
         @Override
         public int getRealCount() {
-            return 2;
+            return picSlide.size();
         }
     }
 
@@ -453,6 +465,7 @@ public class eachBranchDetail extends AppCompatActivity {
             Glide.with(getApplicationContext())
                     .load(eachList.get(position).img)
                     .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
+                    .centerCrop()
                     .into(holder.img);
             holder.day.setText(dayString);
             holder.time.setText(timeString);

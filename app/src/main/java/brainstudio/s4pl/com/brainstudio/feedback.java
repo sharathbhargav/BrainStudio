@@ -40,15 +40,15 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
-
-
-
+import com.neurenor.permissions.PermissionCallback;
+import com.neurenor.permissions.PermissionsHelper;
 
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.concurrent.TimeUnit;
@@ -74,6 +74,9 @@ import julianfalcionelli.magicform.validation.ValidationMinLength;
 import julianfalcionelli.magicform.validation.ValidationNotEmpty;
 import julianfalcionelli.magicform.validation.ValidationRegex;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
+
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class feedback extends AppCompatActivity  {
 
@@ -116,6 +119,7 @@ public class feedback extends AppCompatActivity  {
 
 
     StorageReference mainRef;
+    PermissionsHelper helper;
 
 
 
@@ -132,7 +136,7 @@ public class feedback extends AppCompatActivity  {
         toolbar.setTitle("Enquiry");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        helper=new PermissionsHelper(feedback.this);
         mDialog = new SimpleArcDialog(this);
         dialogBuilder=NiftyDialogBuilder.getInstance(this);
 
@@ -198,9 +202,9 @@ public class feedback extends AppCompatActivity  {
             }
         });
 
-       // final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
-       //         .findViewById(android.R.id.content)).getChildAt(0);
-       // View itemView= LayoutInflater.from(getApplicationContext()).inflate(R.layout.custom_feedback_dialog,viewGroup);
+        // final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
+        //         .findViewById(android.R.id.content)).getChildAt(0);
+        // View itemView= LayoutInflater.from(getApplicationContext()).inflate(R.layout.custom_feedback_dialog,viewGroup);
 
         feedbackRef=FirebaseDatabase.getInstance().getReference("feedback");
         dialogBuilder
@@ -218,13 +222,13 @@ public class feedback extends AppCompatActivity  {
                 .isCancelableOnTouchOutside(false)
                 .isCancelable(false)
                 //def    | isCancelable(true)
-             //   .setCustomView(R.layout.custom_feedback_dialog,itemView.getContext())       // .setCustomView(View or ResId,context)
+                //   .setCustomView(R.layout.custom_feedback_dialog,itemView.getContext())       // .setCustomView(View or ResId,context)
 
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialogBuilder.dismiss();
-                            fileType=0;
+                        fileType=0;
                         messageEdit.setVisibility(View.VISIBLE);
                         messageContainer.setVisibility(View.VISIBLE);
                         feedbackMessageGroup.setVisibility(View.VISIBLE);
@@ -236,9 +240,48 @@ public class feedback extends AppCompatActivity  {
                     public void onClick(View v) {
 
                         dialogBuilder.dismiss();
-                        submit.setVisibility(View.VISIBLE);
-                        fileType=1;
-                        startRecording();
+                        if (helper.isPermissionGranted(RECORD_AUDIO)) {
+                            submit.setVisibility(View.VISIBLE);
+                            fileType = 1;
+                            startRecording();
+                        }
+                        else {
+                            helper.requestPermissions(new String[]{RECORD_AUDIO}, new PermissionCallback() {
+                                @Override
+                                public void onResponseReceived(HashMap<String, PermissionsHelper.PermissionGrant> mapPermissionGrants) {
+                                    PermissionsHelper.PermissionGrant permissionGrant = mapPermissionGrants
+                                            .get(RECORD_AUDIO);
+                                    switch (permissionGrant) {
+                                        case GRANTED:
+                                            submit.setVisibility(View.VISIBLE);
+                                            fileType=1;
+                                            startRecording();
+                                            break;
+                                        case DENIED:
+                                            Snacky.builder()
+                                                    .setActivty(feedback.this)
+                                                    .setText("Permission required to continue." )
+                                                    .setDuration(Snacky.LENGTH_LONG)
+                                                    .error()
+                                                    .show();
+                                            next.setVisibility(View.VISIBLE);
+                                            break;
+                                        case NEVERSHOW:
+                                            Snacky.builder()
+                                                    .setActivty(feedback.this)
+                                                    .setText("Permission required to continue." )
+                                                    .setDuration(Snacky.LENGTH_LONG)
+                                                    .error()
+                                                    .show();
+                                            next.setVisibility(View.VISIBLE);
+                                            break;
+
+
+                                    }
+                                }
+                            });
+                        }
+
                     }
                 });
 
@@ -253,7 +296,12 @@ public class feedback extends AppCompatActivity  {
                 magicForm.validate();
                 if(valid) {
 
-                    dialogBuilder.show();
+                    dialogBuilder.withButton1Text("Type")                                      //def gone
+                            .withButton2Text("Voice")                                  //def gone
+                            .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
+                            //   .setCustomView(R.layout.custom_feedback_dialog,itemView.getContext())       // .setCustomView(View or ResId,context)
+
+                            .show();
                     next.setVisibility(View.GONE);
                 }
             }
@@ -266,19 +314,21 @@ public class feedback extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 mDialog.show();
-                    pushData();
+                pushData();
             }
         });
 
 
 
+    }
 
 
-
-
-
-
-
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        /**
+         * helper's onRequestPermissionsResult must be called from activity.
+         */
+        helper.onRequestPermissionsResult(permissions, grantResults);
     }
 
 
@@ -318,8 +368,8 @@ public class feedback extends AppCompatActivity  {
 
 
         else {
-        Uri file=Uri.fromFile(new File(filePath));
-        StorageReference subref=mainRef.child(timeStamp);
+            Uri file=Uri.fromFile(new File(filePath));
+            StorageReference subref=mainRef.child(timeStamp);
 
 
             UploadTask task = subref.putFile(file);
@@ -335,7 +385,7 @@ public class feedback extends AppCompatActivity  {
                             +centre;
 
 
-                     sendMail(msg);
+                    sendMail(msg);
                 }
             });
             task.addOnFailureListener(new OnFailureListener() {
@@ -406,13 +456,13 @@ public class feedback extends AppCompatActivity  {
     {
         magicForm=new MagicForm(ValidationMode.ON_VALIDATE)
                 .addField(new FormField(nameEdit)
-                            .addValidation(new ValidationNotEmpty().setMessage("Name required"))
-                            )
+                        .addValidation(new ValidationNotEmpty().setMessage("Name required"))
+                )
                 .addField(new FormField(phoneEdit)
-                            .addValidation(new ValidationNotEmpty().setMessage("Phone number required"))
-                            .addValidation(new ValidationRegex(Patterns.PHONE).setMessage("Phone number required"))
-                            .addValidation(new ValidationMinLength(8).setMessage("Please enter valid phone number"))
-                            .addValidation(new ValidationMaxLength(10).setMessage("Please enter valid phone number")))
+                        .addValidation(new ValidationNotEmpty().setMessage("Phone number required"))
+                        .addValidation(new ValidationRegex(Patterns.PHONE).setMessage("Phone number required"))
+                        .addValidation(new ValidationMinLength(8).setMessage("Please enter valid phone number"))
+                        .addValidation(new ValidationMaxLength(10).setMessage("Please enter valid phone number")))
                 .setListener(new ValidatorCallbacks() {
                     @Override
                     public void onSuccess() {
@@ -486,7 +536,7 @@ public class feedback extends AppCompatActivity  {
                         .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                         //   .setCustomView(R.layout.custom_feedback_dialog,itemView.getContext())       // .setCustomView(View or ResId,context)
 
-                       .show();
+                        .show();
             }
         }
     }

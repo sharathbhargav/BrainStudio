@@ -82,7 +82,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:layout_marginTop="30dp"
+    android:layout_marginTop="5dp"
     android:weightSum="100">
 
     <TextView
@@ -97,14 +97,14 @@
 
 <RelativeLayout
     android:layout_width="0dp"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_weight="25"
     android:layout_marginRight="30dp">
 
         <rm.com.clocks.ClockImageView
             android:id="@+id/clock1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="150dp"
 
             app:hours="16"
 
@@ -140,7 +140,7 @@
         <rm.com.clocks.ClockImageView
             android:id="@+id/clock2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="150dp"
 
             app:hours="16"
             app:minutes="20"

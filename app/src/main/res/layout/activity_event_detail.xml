@@ -72,7 +72,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/eventDetailVenueHead"
                 app:customTypeface="headingBold"
+
                 tools:ignore="MissingPrefix"
+                android:layout_margin="5dp"
                 android:textSize="30dp"
                 android:layout_toRightOf="@id/eventDetailVenueImage"
                 android:text="Venue"/>
@@ -81,6 +83,7 @@
                 android:layout_height="wrap_content"
                 app:customTypeface="subHeadingBold"
                 tools:ignore="MissingPrefix"
+                android:layout_margin="5dp"
                 android:id="@+id/eventDetailVenueDescription"
                 android:layout_toRightOf="@id/eventDetailVenueImage"
                 android:layout_below="@id/eventDetailVenueHead"/>
@@ -109,6 +112,7 @@
                     android:id="@+id/eventDetailDayHead"
                     app:customTypeface="headingBold"
                     tools:ignore="MissingPrefix"
+                    android:layout_margin="5dp"
                     android:textSize="30dp"
                     android:layout_toRightOf="@id/eventDetailTimeImage"
                     android:text="Schedule"/>
@@ -117,6 +121,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/eventDetailDate"
                         android:textSize="25dp"
+                        android:layout_margin="5dp"
                         app:customTypeface="subHeadingBold"
                         tools:ignore="MissingPrefix"
                         android:layout_toRightOf="@id/eventDetailTimeImage"
@@ -126,6 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/eventDetailDays"
+                        android:layout_margin="5dp"
                         app:customTypeface="subHeadingBold"
                         tools:ignore="MissingPrefix"
                         android:layout_toRightOf="@id/eventDetailTimeImage"
@@ -134,6 +140,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/eventDetailTime"
+                        android:layout_margin="5dp"
                         app:customTypeface="subHeadingBold"
                         tools:ignore="MissingPrefix"
                         android:layout_toRightOf="@id/eventDetailTimeImage"
@@ -150,6 +157,7 @@
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:id="@+id/eventDetailDescription"
+                      android:layout_margin="5dp"
                       app:customTypeface="subHeadingBold"
                       tools:ignore="MissingPrefix"
                   android:layout_below="@id/eventDetailTimeCard"/>
