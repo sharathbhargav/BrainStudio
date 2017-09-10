@@ -2,7 +2,8 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,9 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-
+            app:customTypeface="subHeadingBold"
+            tools:ignore="MissingPrefix"
             android:text="Address"
-            android:textColor="@color/text1"
+            android:textColor="@color/text2"
             android:id="@+id/home_card_back_address"
             />
 
@@ -87,6 +89,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="30"
+        app:customTypeface="subHeadingBold"
+        tools:ignore="MissingPrefix"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal|center_vertical"
         android:text="Active hours"/>
@@ -108,9 +112,10 @@
             app:timeSetDuration="400"
             app:hasFrame="true"
 
+
             app:indeterminateSpeed="2"
             app:pointerWidth="regular"
-            app:clockColor="@color/colorPrimary"
+
             app:frameWidth="regular"
             />
     <TextView
@@ -118,6 +123,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
     android:layout_alignBottom="@id/clock1"
+        app:customTypeface="subHeadingBold"
+        tools:ignore="MissingPrefix"
         android:layout_centerHorizontal="true"
         android:id="@+id/home_card_clock1_text"
         android:background="@color/colorPrimary"
@@ -148,6 +155,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            app:customTypeface="subHeadingBold"
+            tools:ignore="MissingPrefix"
             android:layout_alignBottom="@id/clock2"
             android:layout_centerHorizontal="true"
             android:id="@+id/home_card_clock2_text"

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
@@ -8,15 +11,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/reviewCardBodyMessage"
         android:background="@drawable/edit_text_border"
+        app:customTypeface="subHeadingBold"
+        tools:ignore="MissingPrefix"
         android:layout_margin="5dp"
         />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/reviewCardBodyMessage"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+
+        android:src="@drawable/audiostream"
         android:id="@+id/streamAudio"
-        android:text="stream"/>
+        android:text="stream"
+        android:layout_alignTop="@+id/reviewCardBodyMessage"
+        android:layout_centerHorizontal="true" />
 
 
 

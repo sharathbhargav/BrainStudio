@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00FFFF">
 
@@ -9,7 +12,10 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:id="@+id/eachBranchHeaderText"
+        app:customTypeface="headingBold"
+        tools:ignore="MissingPrefix"
         android:gravity="center"
+        android:textSize="40sp"
         android:text="Rubik's Cube"
 
         android:textColor="#000000"/>

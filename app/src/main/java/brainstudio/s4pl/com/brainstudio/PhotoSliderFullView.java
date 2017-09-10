@@ -37,6 +37,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.mateware.snacky.Snacky;
 
 public class PhotoSliderFullView extends AppCompatActivity {
     @BindView(R.id.photosliderFullView) HackyViewPager photoSliderFullView;
@@ -202,7 +203,12 @@ public class PhotoSliderFullView extends AppCompatActivity {
         final File localFile=new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
         if(localFile.exists())
         {
-            Toast.makeText(getApplicationContext(), "The Image is previously downloaded and exists in path " + localFile.getPath(), Toast.LENGTH_LONG).show();
+            Snacky.builder()
+                    .setActivty(PhotoSliderFullView.this)
+                    .setText("The Image is previously downloaded and exists in path " + localFile.getPath())
+                    .setDuration(Snacky.LENGTH_SHORT)
+                    .info()
+                    .show();
 
         }
         else
@@ -213,7 +219,13 @@ public class PhotoSliderFullView extends AppCompatActivity {
             task.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getApplicationContext(), "File sucessfully downloaded to " + localFile.getPath(), Toast.LENGTH_SHORT).show();
+
+                    Snacky.builder()
+                            .setActivty(PhotoSliderFullView.this)
+                            .setText("File sucessfully downloaded to " + localFile.getPath())
+                            .setDuration(Snacky.LENGTH_SHORT)
+                            .success()
+                            .show();
                     progressContainer.setVisibility(View.GONE);
                 }
 

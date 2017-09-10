@@ -45,6 +45,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import eu.davidea.flipview.FlipView;
 import io.fabric.sdk.android.Fabric;
 import rm.com.clocks.ClockDrawable;
@@ -76,6 +78,8 @@ public class Home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
@@ -91,6 +95,7 @@ public class Home extends AppCompatActivity {
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
         configuration.setText("Please wait..");
         mDialog.setConfiguration(configuration);
+        mDialog.setCancelable(false);
         extractCenterData();
 
         toolbar.setTitle("Home");
@@ -186,6 +191,7 @@ public class Home extends AppCompatActivity {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     if(noteDataSnapshot.child("show").getValue(String.class)!=null) {
                         homeListData list = new homeListData();
+                        list.ref=noteDataSnapshot.getKey();
                         list.name = noteDataSnapshot.child("name").getValue(String.class);
                         list.address = noteDataSnapshot.child("address").getValue(String.class);
                         list.img = noteDataSnapshot.child("mainpic").getValue(String.class);
@@ -272,14 +278,18 @@ public class Home extends AppCompatActivity {
             ImageView sat=(ImageView)back.findViewById(R.id.home_back_saturday);
 
 
-
+            Drawable drawable = getResources().getDrawable(R.drawable.background);
             final ClockImageView clocks=(ClockImageView) back.findViewById(R.id.clock1);
             final ClockImageView clocks2=(ClockImageView)back.findViewById(R.id.clock2);
 
+
             TextView clockText1=(TextView) back.findViewById(R.id.home_card_clock1_text);
             TextView clockText2=(TextView)back.findViewById(R.id.home_card_clock2_text);
-            clocks.setClockColor(R.color.colorPrimary);
-            clocks2.setClockColor(R.color.colorPrimary);
+
+
+
+            clocks.setClockColor(Color.parseColor("#d32f2f"));
+            clocks2.setClockColor(Color.parseColor("#d32f2f"));
 
 
             final String[] time=centerList.get(position).time.split(":");
@@ -401,6 +411,7 @@ public class Home extends AppCompatActivity {
 
                         path = "events/" + centerList.get(position).ref;
                         toEvent.putExtra("path",path);
+                        Log.v("detail",path);
                         startActivity(toEvent);
 
                     }

@@ -86,7 +86,8 @@ dependencies {
     // https://github.com/chrisbanes/PhotoView
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
 
-
+    //https://android-arsenal.com/details/1/889  fonts
+    compile 'cat.ppicas.customtypeface:library:2.0.0'
 
     //crashnalytics
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {

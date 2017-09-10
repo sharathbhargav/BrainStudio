@@ -5,6 +5,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +24,8 @@ import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
 
 public class Event_detail extends AppCompatActivity {
@@ -51,10 +54,12 @@ public class Event_detail extends AppCompatActivity {
 
 
     DatabaseReference parent;
-
+    String timeString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
         ButterKnife.bind(this);
@@ -66,15 +71,32 @@ public class Event_detail extends AppCompatActivity {
 
         Intent fromHome=getIntent();
         String path=fromHome.getStringExtra("path");
+        Log.v("detail","received path=="+path);
         parent= FirebaseDatabase.getInstance().getReference(path);
-
+        Log.v("detail",parent.toString());
         parent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 date.setText(dataSnapshot.child("date").getValue(String.class));
+
                 days.setText(dataSnapshot.child("days").getValue(String.class));
                 venue.setText(dataSnapshot.child("address").getValue(String.class));
-                time.setText(dataSnapshot.child("time").getValue(String.class));
+
+                final String[] time1=dataSnapshot.child("time").getValue(String.class).split(":");
+                String t1,t2;
+                int t11=Integer.parseInt(time1[0]);
+                int t12=Integer.parseInt(time1[2]);
+                if(t11>12)
+                    t1=t11%12+":"+time1[1]+" pm";
+                else
+                    t1=t11+":"+time1[1]+" am";
+
+                if(t12>12)
+                    t2=t12%12+":"+time1[3]+" pm";
+                else
+                    t2=t12+":"+time1[3]+" am";
+                timeString=t1+"-"+t2;
+                time.setText(timeString);
                 description.setText(dataSnapshot.child("description").getValue(String.class));
                 phone=dataSnapshot.child("phone").getValue(String.class);
                 register.setEnabled(true);

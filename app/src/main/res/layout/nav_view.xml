@@ -11,7 +11,8 @@
     android:fitsSystemWindows="true"
 
     app:itemTextAppearance="@style/navView"
-
+    app:customTypeface="headingBold"
+    tools:ignore="MissingPrefix"
     app:menu="@menu/home_menu"
     app:headerLayout="@layout/nav_view_header"
     app:arc_cropDirection="cropOutside"

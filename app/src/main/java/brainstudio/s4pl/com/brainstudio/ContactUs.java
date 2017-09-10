@@ -14,6 +14,8 @@ import com.crashlytics.android.Crashlytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
 
 public class ContactUs extends AppCompatActivity {
@@ -35,6 +37,8 @@ public class ContactUs extends AppCompatActivity {
     public static String FACEBOOK_PAGE_ID = "S4plBrainStudio";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
         ButterKnife.bind(this);

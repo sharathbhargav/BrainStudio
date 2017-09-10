@@ -19,12 +19,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
+import com.leo.simplearcloader.ArcConfiguration;
+import com.leo.simplearcloader.SimpleArcDialog;
+import com.leo.simplearcloader.SimpleArcLoader;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
 
 public class AboutUs extends AppCompatActivity {
@@ -32,24 +37,39 @@ public class AboutUs extends AppCompatActivity {
 
     @BindView(R.id.about_us_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.collapsing_toolbar)
+    @BindView(R.id.about_us_collapsing_toolbar)
     CollapsingToolbarLayout collapsingTool;
     @BindView(R.id.aboutUsDynamicText)
     TextView dynamicText;
 
     int progress=0;
     DatabaseReference refParent;
-
+    SimpleArcDialog mDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
+        ButterKnife.bind(this);
+        mDialog = new SimpleArcDialog(this);
+
+        ArcConfiguration configuration = new ArcConfiguration(getApplicationContext());
+        configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
+        collapsingTool.setTitle("About Us");
+
+
+        configuration.setText("Please wait..");
+        mDialog.setConfiguration(configuration);
+       mDialog.setCancelable(false);
+        mDialog.show();
         refParent= FirebaseDatabase.getInstance().getReference("about");
         refParent.child("maintext").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dynamicText.setText(dataSnapshot.getValue(String.class));
+                mDialog.dismiss();
             }
 
             @Override
@@ -57,9 +77,9 @@ public class AboutUs extends AppCompatActivity {
 
             }
         });
-        ButterKnife.bind(this);
+
         Fabric.with(this, new Crashlytics());
-        toolbar.setTitle("");
+        toolbar.setTitle("About us");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

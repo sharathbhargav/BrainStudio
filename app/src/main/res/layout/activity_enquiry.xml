@@ -53,7 +53,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:hint="Participant's Name"
-            android:textColorHint="#EF9A9A"
+
             >
 
     <EditText
@@ -91,7 +91,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         app:hintTextAppearance="@style/MyHintText"
-        android:textColorHint="#EF9A9A"
+
         android:hint="Phone Number"
         >
     <EditText
@@ -125,7 +125,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintTextAppearance="@style/MyHintText"
-            android:textColorHint="#EF9A9A"
+
            >
     <EditText
         android:layout_width="match_parent"
@@ -154,7 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintTextAppearance="@style/MyHintText"
-            android:textColorHint="#EF9A9A"
+
             >
     <EditText
         android:layout_width="match_parent"
@@ -183,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:hintTextAppearance="@style/MyHintText"
-            android:textColorHint="#EF9A9A"
+
             >
     <EditText
         android:layout_width="match_parent"
@@ -191,18 +191,25 @@
         android:gravity="start"
         android:inputType="textMultiLine"
         android:theme="@style/MyEditText"
-
-        android:maxLines="5"
+        android:minLines="2"
+        android:maxLines="10"
         android:id="@+id/enquiryMessageEdit"
         android:hint="Enquiry"
         />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
             <Button
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/enquirySubmit"
-                android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+
+
+                android:drawableLeft="@drawable/ic_cloud_done_white_24dp"
+                android:background="@drawable/submit_button_background"
+                android:textColor="@color/textWhite"
+                android:gravity="center"
                 android:text="Submit"/>
         </LinearLayout>
     </ScrollView>

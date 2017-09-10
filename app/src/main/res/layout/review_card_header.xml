@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -16,6 +17,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/reviewCardHeaderName"
+        app:customTypeface="headingBold"
+        tools:ignore="MissingPrefix"
+        android:textSize="40sp"
     android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
     android:layout_marginBottom="5dp"
@@ -27,7 +31,8 @@
         android:id="@+id/reviewCardHeaderCourse"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-
+        app:customTypeface="subHeadingBold"
+        tools:ignore="MissingPrefix"
         android:gravity="bottom|start"
 
         android:text="Course"/>
@@ -36,6 +41,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/reviewCardHeaderCentre"
         android:text="Centre"
+        app:customTypeface="subHeadingBold"
+        tools:ignore="MissingPrefix"
         android:layout_alignParentBottom="true"
         android:gravity="bottom|end"
         android:layout_alignParentRight="true"/>

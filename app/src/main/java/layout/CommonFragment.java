@@ -47,9 +47,11 @@ public class CommonFragment extends Fragment {
     @BindView(R.id.eachProgramGridRecycler)
     RecyclerView eachProgramGridRecycler;
     @BindView(R.id.eachProgramBenifits)
-            TextView benifits;
+    TextView benifits;
     @BindView(R.id.eachProgramInfo)
-            TextView info;
+    TextView info;
+    @BindView(R.id.eachProgramHeading)
+    TextView heading;
 
     eachProgramGridRecyclerAdaptor recyclerAdaptor;
     GridLayoutManager gridLayoutManager;
@@ -98,16 +100,20 @@ public class CommonFragment extends Fragment {
                 benifitsRef=dataSnapshot.child("benifits");
                 infoRef=dataSnapshot.child("info");
                 imgRef=dataSnapshot.child("img");
+                heading.setText(dataSnapshot.child("name").getValue(String.class));
                 benifits.setText(benifitsRef.getValue(String.class)+"");
                 info.setText(infoRef.getValue(String.class));
+
+
                 for(DataSnapshot d:imgRef.getChildren())
                 {
                     EachProgramCardData t=new EachProgramCardData();
                     t.link=d.child("link").getValue(String.class);
                     t.name=d.child("name").getValue(String.class);
                     list.add(t);
+                    recyclerAdaptor.notifyDataSetChanged();
                 }
-                recyclerAdaptor.notifyDataSetChanged();
+
             }
 
             @Override
@@ -174,6 +180,7 @@ public class CommonFragment extends Fragment {
             Glide.with(getContext())
                     .load(list.get(position).link)
                     .thumbnail(Glide.with(getContext()).load(R.drawable.ring))
+                    .centerCrop()
                     .into(holder.gridCardImage);
             holder.gridCardText.setText(list.get(position).name);
         }

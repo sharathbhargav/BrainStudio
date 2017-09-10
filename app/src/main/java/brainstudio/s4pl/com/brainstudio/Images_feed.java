@@ -41,6 +41,8 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 
 
 /**
@@ -52,6 +54,7 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class Images_feed extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -101,7 +104,7 @@ public class Images_feed extends Fragment {
     ArrayList<String> urlsList=new ArrayList<>( );
     int progress=0;
 
-    ProgressDialog progressBar;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,7 +121,7 @@ public class Images_feed extends Fragment {
 
         storage = FirebaseStorage.getInstance();
         //Log.v("test123",storage.getReferenceFromUrl(urlsList.get(0)).toString());
-        progressBar=new ProgressDialog(getActivity());
+
         imageListAdapter adapter=new imageListAdapter();
         extractImageUrls(adapter);
         imageList.setAdapter(adapter);

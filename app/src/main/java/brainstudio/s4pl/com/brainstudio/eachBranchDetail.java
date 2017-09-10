@@ -27,11 +27,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
+import com.leo.simplearcloader.ArcConfiguration;
+import com.leo.simplearcloader.SimpleArcDialog;
+import com.leo.simplearcloader.SimpleArcLoader;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
 
 public class eachBranchDetail extends AppCompatActivity {
@@ -57,7 +62,7 @@ public class eachBranchDetail extends AppCompatActivity {
             ExpandableLayout calligraphyExpandableLayout;
 
     @BindView(R.id.eachBranchDetailLocationButton)
-    Button location;
+    ImageView location;
     LinearLayoutManager layoutManagerCube;
     RecyclerView cubeRecycle,jugglingRecycle,graphoRecycle,stackRecycle,corporateRecycle,calligraphyRecycle;
     eachBranchRecyclerAdaptor cubeRecyclerAdaptor,jugglingRecycleAdaptor,graphoRecycleAdaptor,stackRecycleAdaptor,corporateRecycleAdaptor,calligraphyRecycleAdaptor;
@@ -68,9 +73,15 @@ public class eachBranchDetail extends AppCompatActivity {
 
     String centre="Uttarahalli",locationString="0,0";
     DatabaseReference parent,child,prog,loc;
+    String dayString,timeString;
+
+
+    SimpleArcDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_branch_detail);
         ButterKnife.bind(this);
@@ -86,12 +97,43 @@ public class eachBranchDetail extends AppCompatActivity {
         String path=fromHome.getStringExtra("path");
 
 
+
+        mDialog = new SimpleArcDialog(this);
+
+        ArcConfiguration configuration = new ArcConfiguration(getApplicationContext());
+        configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
+        configuration.setText("Please wait..");
+        mDialog.setConfiguration(configuration);
+        mDialog.setCancelable(false);
+        mDialog.show();
+
+
+
+
+
+
+
         Log.v("home","path received=  "+path);
         child= FirebaseDatabase.getInstance().getReference(path);
         child.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 collapsingToolbarLayout.setTitle(dataSnapshot.child("name").getValue(String.class));
+                final String[] time=dataSnapshot.child("time").getValue(String.class).split(":");
+                String t1,t2;
+                int t11=Integer.parseInt(time[0]);
+                int t12=Integer.parseInt(time[2]);
+                if(t11>12)
+                    t1=t11%12+":"+time[1]+" pm";
+                else
+                    t1=t11+":"+time[1]+" am";
+
+                if(t12>12)
+                    t2=t12%12+":"+time[3]+" pm";
+                else
+                    t2=t12+":"+time[3]+" am";
+                timeString=t1+"-"+t2;
+                dayString=dataSnapshot.child("days").getValue(String.class);
             }
 
             @Override
@@ -325,6 +367,8 @@ public class eachBranchDetail extends AppCompatActivity {
                     temp.cost=d.child("cost").getValue(Integer.class);
                     temp.head=d.child("name").getValue(String.class);
                     list.add(temp);
+                    if(mDialog.isShowing())
+                        mDialog.dismiss();
                 }
             }
 
@@ -410,7 +454,8 @@ public class eachBranchDetail extends AppCompatActivity {
                     .load(eachList.get(position).img)
                     .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
                     .into(holder.img);
-
+            holder.day.setText(dayString);
+            holder.time.setText(timeString);
             holder.cost.setText(eachList.get(position).cost+"");
 
         }

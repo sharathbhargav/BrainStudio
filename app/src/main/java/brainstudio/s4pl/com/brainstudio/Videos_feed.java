@@ -24,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.leo.simplearcloader.ArcConfiguration;
+import com.leo.simplearcloader.SimpleArcDialog;
+import com.leo.simplearcloader.SimpleArcLoader;
 import com.robertsimoes.shareable.Shareable;
 
 import org.apache.commons.io.IOUtils;
@@ -34,9 +37,15 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.mateware.snacky.Snacky;
+
 public class Videos_feed extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+
+    SimpleArcDialog mDialog;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -80,6 +89,15 @@ public class Videos_feed extends Fragment {
 
         View v=inflater.inflate(R.layout.fragment_videos_feed, container, false);
         ButterKnife.bind(this,v);
+
+
+        mDialog = new SimpleArcDialog(getContext());
+
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
+        configuration.setText("Please wait..");
+        mDialog.setConfiguration(configuration);
+        mDialog.setCancelable(false);
         layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         youtubeThumbNailRecyclerList.setLayoutManager(layoutManager);
@@ -91,7 +109,7 @@ public class Videos_feed extends Fragment {
 
     void extractVieoIds(final thumbNailAdapter adapter)
     {
-
+        mDialog.show();
         DatabaseReference parentRef= FirebaseDatabase.getInstance().getReference("videos");
         parentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -99,6 +117,7 @@ public class Videos_feed extends Fragment {
                 for(DataSnapshot noteDataSnapShot:dataSnapshot.getChildren()) {
                     videoIds.add( noteDataSnapShot.getValue(String.class));
                     extractVideoHeadings(noteDataSnapShot.getValue(String.class),adapter);
+                    mDialog.dismiss();
                 }
             }
 
@@ -214,7 +233,12 @@ public class Videos_feed extends Fragment {
                     }
                     catch (android.content.ActivityNotFoundException ex)
                     {
-
+                        Snacky.builder()
+                                .setActivty(getActivity())
+                                .setText("Sorry no whatsApp found.Please install whatsApp and try again")
+                                .setDuration(Snacky.LENGTH_SHORT)
+                                .error()
+                                .show();
                     }
 
                 }
@@ -222,7 +246,7 @@ public class Videos_feed extends Fragment {
             holder.shareFacebook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Shareable shareLink=new Shareable.Builder(getActivity().getBaseContext())
+                    Shareable shareLink=new Shareable.Builder(getContext())
                             .message("Brain Studio")
                             .url(watchActualUrl+videoIds.get(position))
                             .socialChannel(Shareable.Builder.FACEBOOK)
@@ -234,7 +258,7 @@ public class Videos_feed extends Fragment {
                 @Override
                 public void onClick(View v)
                 {
-                    Shareable shareLink=new Shareable.Builder(getActivity().getBaseContext())
+                    Shareable shareLink=new Shareable.Builder(getContext())
                            .message("Brain Studio")
                            .url(watchActualUrl+videoIds.get(position))
                            .build();

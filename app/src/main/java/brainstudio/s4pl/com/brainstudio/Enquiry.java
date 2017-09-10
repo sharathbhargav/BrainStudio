@@ -1,5 +1,6 @@
 package brainstudio.s4pl.com.brainstudio;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import de.mateware.snacky.Snacky;
 import io.fabric.sdk.android.Fabric;
 import julianfalcionelli.magicform.MagicForm;
@@ -55,6 +58,8 @@ public class Enquiry extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enquiry);
         ButterKnife.bind(this);
@@ -70,6 +75,7 @@ public class Enquiry extends AppCompatActivity {
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
         configuration.setText("Please wait..");
         mDialog.setConfiguration(configuration);
+        mDialog.setCancelable(false);
         validate();
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -126,8 +132,6 @@ public class Enquiry extends AppCompatActivity {
                 .withSenderName("Your sender name")
                 .withMailTo("tssuhas18@gmail.com")
                 .withProcessVisibility(false)
-                .withMailCc("cc-email@gmail.com")
-                .withMailBcc("bcc-email@gmail.com")
                 .withType(BackgroundMail.TYPE_PLAIN)
                 .withSubject("this is the subject")
 
@@ -143,7 +147,15 @@ public class Enquiry extends AppCompatActivity {
                                 .setDuration(Snacky.LENGTH_SHORT)
                                 .success()
                                 .show();
-                       // finish();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+
+                            public void run() {
+                                // yourMethod();
+                                finish();
+
+                            }
+                        }, 2000);
                     }
                 })
                 .withOnFailCallback(new BackgroundMail.OnFailCallback() {

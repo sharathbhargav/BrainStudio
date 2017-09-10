@@ -106,10 +106,13 @@
                 app:contentLayout="@layout/each_branch_common_body"
                 app:headerLayout="@layout/each_branch_common_header" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:src="@drawable/locationbutton"
                 android:visibility="gone"
+                android:layout_marginTop="20dp"
                 android:id="@+id/eachBranchDetailLocationButton"
                 android:text="Location"/>
 

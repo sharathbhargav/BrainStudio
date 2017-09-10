@@ -7,7 +7,8 @@
     <color name="text2">#123f9f</color>
     <color name="colorSecondary">#9C27B0</color>
     <color name="comedyRed">#F44336</color>
-
+    <color name="textWhite">#ffffff</color>
+    <color name="textBlack">#000000</color>
     <array name="audioLoader">
         <item>#ffffff</item>
         <item>#00fff0</item>

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -31,11 +32,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.leo.simplearcloader.SimpleArcLoader;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
+import de.mateware.snacky.Snacky;
 import io.fabric.sdk.android.Fabric;
 
 public class Reviews extends AppCompatActivity {
@@ -55,6 +60,8 @@ public class Reviews extends AppCompatActivity {
     ViewGroup viewGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviews);
         ButterKnife.bind(this);
@@ -70,13 +77,13 @@ public class Reviews extends AppCompatActivity {
         dialogBuilder=NiftyDialogBuilder.getInstance(this);
 
         dialogBuilder
-                .withTitle("Choose your preference")                                  //.withTitle(null)  no title
+                .withTitle("Audio Review")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
                // .withMessage("How would you like to give your feedback")                     //.withMessage(null)  no Msg
                // .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
                 .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)
-                .withIcon(R.drawable.aboutus)
+
                 .withDuration(700)                                          //def
                                                   //def gone
                 .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
@@ -132,6 +139,7 @@ public class Reviews extends AppCompatActivity {
 
         @Override
         public reviewCardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
             View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.review_card,parent,false);
             return new reviewCardHolder(itemView);
         }
@@ -171,8 +179,9 @@ public class Reviews extends AppCompatActivity {
 
            final Handler handler = new Handler();
           final  SeekBar seekBar=(SeekBar) dialogBuilder.findViewById(R.id.audioSeekBar);
+            seekBar.setProgress(0);
             final TextView audioName=(TextView)dialogBuilder.findViewById(R.id.audioDialogName);
-
+            final SimpleArcLoader loader=(SimpleArcLoader)dialogBuilder.findViewById(R.id.audioLoader);
         runnable =new Runnable() {
 
                 public void run() {
@@ -196,6 +205,11 @@ public class Reviews extends AppCompatActivity {
                         float finalPosition = total * progress / 100;
                         mp.seekTo((int) (finalPosition));
                         handler.postDelayed(runnable, 1000);
+                    }
+                    if(progress==100)
+                    {
+                        dialogBuilder.withButton1Text("Play again");
+                        holder.playing=false;
                     }
                 }
 
@@ -251,20 +265,28 @@ public class Reviews extends AppCompatActivity {
                         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                             @Override
                             public void onPrepared(MediaPlayer mp) {
+
                                 audioName.setText("Playing");
                                 mp.start();
                                 lengthOfAudio=mp.getDuration();
 
 
-                                handler.postDelayed(runnable,1000);
-
+                                handler.postDelayed(runnable,1);
+                                loader.setVisibility(View.GONE);
 
                             }
                         });
                         mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                             @Override
                             public boolean onError(MediaPlayer mp, int what, int extra) {
-                                Toast.makeText(getApplicationContext(),"Error in streaming",Toast.LENGTH_LONG).show();
+
+                                Snacky.builder()
+                                        .setActivty(Reviews.this)
+                                        .setText("Error in playing.")
+                                        .setDuration(Snacky.LENGTH_SHORT)
+                                        .error()
+                                        .show();
+
                                 return false;
                             }
                         });
@@ -273,7 +295,8 @@ public class Reviews extends AppCompatActivity {
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                Toast.makeText(getApplicationContext(),"Playing complete",Toast.LENGTH_LONG).show();
+                                dialogBuilder.withButton1Text("Play again");
+                                holder.playing=false;
                             }
                         });
                     }
@@ -295,7 +318,7 @@ public class Reviews extends AppCompatActivity {
         {
             ExpandableLayout eachCardLayout;
             TextView name,course,centre,message;
-            Button play;
+            ImageView play;
 
             boolean playing=true;
 
@@ -310,7 +333,7 @@ public class Reviews extends AppCompatActivity {
                 course=(TextView)header.findViewById(R.id.reviewCardHeaderCourse);
                 centre=(TextView)header.findViewById(R.id.reviewCardHeaderCentre);
                 message=(TextView)body.findViewById(R.id.reviewCardBodyMessage);
-                play=(Button)body.findViewById(R.id.streamAudio);
+                play=(ImageView) body.findViewById(R.id.streamAudio);
 
 
 

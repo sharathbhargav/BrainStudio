@@ -19,10 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
 import layout.CommonFragment;
 
@@ -47,12 +50,17 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
     Toolbar toolbar;
 
     private int[] tabIcons = {
-            R.drawable.background,
-            R.drawable.background,
-            R.drawable.ic_home_white_36dp
+            R.drawable.cube,
+            R.drawable.juggle,
+            R.drawable.scientifichand,
+            R.drawable.speedstack,
+            R.drawable.calligraphy,
+            R.drawable.corporatetraining
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programmes);
         Fabric.with(this, new Crashlytics());
@@ -70,9 +78,15 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[2]);
-        tabLayout.setSelectedTabIndicatorColor(Color.BLUE);
+        for(int i=0;i<=5;i++)
+        {
+            View view = getLayoutInflater().inflate(R.layout.customimageviewtab, null);
+            ImageView tabIconCustom=(ImageView)view.findViewById(R.id.tabIconCustom);
+            //ImageView tabIconCustom=new ImageView(getApplicationContext());
+            tabIconCustom.setImageResource(tabIcons[i]);
+            tabLayout.getTabAt(i).setCustomView(tabIconCustom);
+        }
+
 
     }
 

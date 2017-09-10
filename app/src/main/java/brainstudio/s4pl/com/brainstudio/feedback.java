@@ -18,7 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.crashlytics.android.Crashlytics;
 import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
@@ -58,6 +59,8 @@ import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder;
 import cafe.adriel.androidaudiorecorder.model.AudioChannel;
 import cafe.adriel.androidaudiorecorder.model.AudioSampleRate;
 import cafe.adriel.androidaudiorecorder.model.AudioSource;
+import cat.ppicas.customtypeface.CustomTypeface;
+import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import de.mateware.snacky.Snacky;
 import io.fabric.sdk.android.Fabric;
 import julianfalcionelli.magicform.MagicForm;
@@ -92,7 +95,9 @@ public class feedback extends AppCompatActivity  {
     @BindView(R.id.feedbackMessageContainer)
     TextInputLayout messageContainer;
     @BindView(R.id.nextButton)
-            Button next;
+    Button next;
+    @BindView(R.id.feedbackMessageGroup)
+    LinearLayout feedbackMessageGroup;
 
 
 
@@ -117,6 +122,8 @@ public class feedback extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getLayoutInflater().setFactory(new CustomTypefaceFactory(
+                this, CustomTypeface.getInstance()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         ButterKnife.bind(this);
@@ -133,7 +140,9 @@ public class feedback extends AppCompatActivity  {
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
         configuration.setText("Please wait..");
         mDialog.setConfiguration(configuration);
+        mDialog.setCancelable(false);
         validate();
+        mDialog.show();
 
         parent= FirebaseDatabase.getInstance().getReference("centre");
         mainRef=FirebaseStorage.getInstance().getReferenceFromUrl("gs://brainstudio-a7a21.appspot.com");
@@ -144,6 +153,7 @@ public class feedback extends AppCompatActivity  {
                 {
                     centreList.add(d.getKey());
                 }
+                mDialog.dismiss();
                 centreSpinner.setItems(centreList);
 
                 //DataSnapshot d=dataSnapshot.child(centreList.get(0));
@@ -170,7 +180,7 @@ public class feedback extends AppCompatActivity  {
         centreSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                Toast.makeText(getApplicationContext(),item.toString(),Toast.LENGTH_LONG).show();
+
                 centre=item.toString();
             }
         });
@@ -183,7 +193,7 @@ public class feedback extends AppCompatActivity  {
         courseSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                Toast.makeText(getApplicationContext(),item.toString(),Toast.LENGTH_LONG).show();
+
                 course=item.toString();
             }
         });
@@ -205,24 +215,26 @@ public class feedback extends AppCompatActivity  {
                 .withEffect(Effectstype.Flipv)                                         //def Effectstype.Slidetop
                 .withButton1Text("Type")                                      //def gone
                 .withButton2Text("Voice")                                  //def gone
-                .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
+                .isCancelableOnTouchOutside(false)
+                .isCancelable(false)
+                //def    | isCancelable(true)
              //   .setCustomView(R.layout.custom_feedback_dialog,itemView.getContext())       // .setCustomView(View or ResId,context)
 
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
                         dialogBuilder.dismiss();
                             fileType=0;
                         messageEdit.setVisibility(View.VISIBLE);
                         messageContainer.setVisibility(View.VISIBLE);
+                        feedbackMessageGroup.setVisibility(View.VISIBLE);
                         submit.setVisibility(View.VISIBLE);
                     }
                 })
                 .setButton2Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(v.getContext(),"i'm btn2",Toast.LENGTH_SHORT).show();
+
                         dialogBuilder.dismiss();
                         submit.setVisibility(View.VISIBLE);
                         fileType=1;
@@ -329,7 +341,12 @@ public class feedback extends AppCompatActivity  {
             task.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Snacky.builder()
+                            .setActivty(feedback.this)
+                            .setText("Could not upload. Please check your internet connectivity.")
+                            .setDuration(Snacky.LENGTH_SHORT)
+                            .error()
+                            .show();
                     Log.v("store", e.toString() + "\n" + e.getMessage());
                     mDialog.dismiss();
                 }
@@ -454,9 +471,14 @@ public class feedback extends AppCompatActivity  {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_RECORD_AUDIO) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Audio recorded successfully!", Toast.LENGTH_SHORT).show();
+
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Audio was not recorded", Toast.LENGTH_SHORT).show();
+                Snacky.builder()
+                        .setActivty(feedback.this)
+                        .setText("Sorry something went wrong.")
+                        .setDuration(Snacky.LENGTH_SHORT)
+                        .warning()
+                        .show();
 
 
                 dialogBuilder.withButton1Text("Type")                                      //def gone
