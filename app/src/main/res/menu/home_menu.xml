@@ -21,7 +21,9 @@
 
     <item
         android:id="@+id/menu_programmes"
+
         android:title="Programmes"
+        android:icon="@drawable/ic_view_list_white_36dp"
         />
 
 

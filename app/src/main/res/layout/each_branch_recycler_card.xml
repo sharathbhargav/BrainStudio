@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/eachBranchCardHeading"
             app:customTypeface="headingBold"
+            android:textColor="@color/colorSecondary"
             tools:ignore="MissingPrefix"
             android:gravity="center"
             android:textSize="40sp"
@@ -47,7 +48,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Active Days: "/>
+                android:text="Active Days: "
+                android:textColor="@color/colorSecondary"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,7 +71,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Active hours: "/>
+                android:text="Active hours: "
+                android:textColor="@color/colorSecondary"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,7 +93,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fee: "/>
+                android:text="Fee: "
+                android:textColor="@color/colorSecondary"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

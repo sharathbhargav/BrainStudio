@@ -6,7 +6,7 @@
         <corners android:bottomRightRadius="500dp"
             android:topRightRadius="500dp"/>
 <solid
-    android:color="@color/colorPrimary"/>
+    android:color="@color/colorSecondary"/>
 
     </shape>
 </item>

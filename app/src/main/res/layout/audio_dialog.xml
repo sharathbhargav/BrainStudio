@@ -32,6 +32,8 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+    android:progressBackgroundTint="@color/colorSecondaryLight"
+        android:progressTint="@color/colorSecondaryDark"
                 android:layout_below="@id/audioLoader"
         android:id="@+id/audioSeekBar" />
 </RelativeLayout>

@@ -15,8 +15,8 @@ public class application extends Application {
         super.onCreate();
 
 
-        CustomTypeface.getInstance().registerTypeface("headingRegular", getAssets(), "TangerineRegular.ttf");
-        CustomTypeface.getInstance().registerTypeface("headingBold", getAssets(), "TangerineBold.ttf");
+        CustomTypeface.getInstance().registerTypeface("headingRegular", getAssets(), "BreeSerif-Regular.ttf");
+        CustomTypeface.getInstance().registerTypeface("headingBold", getAssets(), "BreeSerif-Regular.ttf");
         CustomTypeface.getInstance().registerTypeface("subHeadingRegular", getAssets(), "PhilosopherRegular.ttf");
         CustomTypeface.getInstance().registerTypeface("subHeadingBold", getAssets(), "PhilosopherBold.ttf");
     }

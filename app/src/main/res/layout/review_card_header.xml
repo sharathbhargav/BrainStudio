@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:elevation="25dp"
-        app:cardBackgroundColor="#CE93D8">
+        app:cardBackgroundColor="@color/colorSecondaryLight">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

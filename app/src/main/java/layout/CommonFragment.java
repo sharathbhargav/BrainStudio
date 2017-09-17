@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,10 +21,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.leo.simplearcloader.ArcConfiguration;
+import com.leo.simplearcloader.SimpleArcDialog;
+import com.leo.simplearcloader.SimpleArcLoader;
 
 import java.util.ArrayList;
 
 import brainstudio.s4pl.com.brainstudio.EachProgramCardData;
+import brainstudio.s4pl.com.brainstudio.programmeData;
 import brainstudio.s4pl.com.brainstudio.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +68,11 @@ public class CommonFragment extends Fragment {
     DatabaseReference level1;
     DataSnapshot benifitsRef,infoRef,imgRef;
     ArrayList<EachProgramCardData> list=new ArrayList<>();
+
+
+    programmeData data=new programmeData();
+
+    SimpleArcDialog mDialog;
     public CommonFragment() {
         // Required empty public constructor
     }
@@ -91,6 +102,18 @@ public class CommonFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
 
         }
+
+        mDialog = new SimpleArcDialog(getContext());
+
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
+        configuration.setText("Please wait..");
+        mDialog.setConfiguration(configuration);
+
+
+
+
+        Log.v("fragment","in onCreate");
     }
 
     @Override
@@ -103,35 +126,106 @@ public class CommonFragment extends Fragment {
         eachProgramGridRecycler.setLayoutManager(gridLayoutManager);
         recyclerAdaptor=new eachProgramGridRecyclerAdaptor();
         eachProgramGridRecycler.setAdapter(recyclerAdaptor);
+        Log.v("fragment","benifits:::"+data.getBenifits(mParam1));
+        heading.requestFocus();
+
         level1= FirebaseDatabase.getInstance().getReference(mParam1);
 
-        level1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                benifitsRef=dataSnapshot.child("benifits");
-                infoRef=dataSnapshot.child("info");
-                imgRef=dataSnapshot.child("img");
-                heading.setText(dataSnapshot.child("name").getValue(String.class));
-                benifits.setText(benifitsRef.getValue(String.class)+"");
-                info.setText(infoRef.getValue(String.class));
+        if(data.getBenifits(mParam1)==null) {
+            mDialog.show();
+            level1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    benifitsRef = dataSnapshot.child("benifits");
+                    infoRef = dataSnapshot.child("info");
+                    imgRef = dataSnapshot.child("img");
 
 
-                for(DataSnapshot d:imgRef.getChildren())
-                {
-                    EachProgramCardData t=new EachProgramCardData();
-                    t.link=d.child("link").getValue(String.class);
-                    t.name=d.child("name").getValue(String.class);
-                    list.add(t);
-                    recyclerAdaptor.notifyDataSetChanged();
+                    data.setData(infoRef.getValue(String.class), benifitsRef.getValue(String.class), dataSnapshot.child("name").getValue(String.class), mParam1);
+                    benifits.setText(data.getBenifits(mParam1));
+                    info.setText(data.getInfo(mParam1));
+                    heading.setText(data.getHead(mParam1));
+                    for (DataSnapshot d : imgRef.getChildren()) {
+                        EachProgramCardData t = new EachProgramCardData();
+                        t.link = d.child("link").getValue(String.class);
+                        t.name = d.child("name").getValue(String.class);
+                        list.add(t);
+                        recyclerAdaptor.notifyDataSetChanged();
+                        mDialog.dismiss();
+                    }
+
+                    if (mDialog.isShowing())
+                        mDialog.dismiss();
+
                 }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+        else
+        {
+            benifits.setText(data.getBenifits(mParam1));
+            info.setText(data.getInfo(mParam1));
+            heading.setText(data.getHead(mParam1));
+
+            level1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    imgRef = dataSnapshot.child("img");
+                    for (DataSnapshot d : imgRef.getChildren()) {
+                        EachProgramCardData t = new EachProgramCardData();
+                        t.link = d.child("link").getValue(String.class);
+                        t.name = d.child("name").getValue(String.class);
+                        list.add(t);
+                        recyclerAdaptor.notifyDataSetChanged();
+                        mDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+
+
+
+
+        Log.v("fragment","in onCreateView");
+
+
+
+
+
+
+
+
+
+        eachProgramGridRecycler.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
         });
+
 
 
         return v;
@@ -147,6 +241,7 @@ public class CommonFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.v("fragment","In onAttach");
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {

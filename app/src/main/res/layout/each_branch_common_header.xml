@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00FFFF">
+    android:background="@color/colorSecondaryDark">
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,5 +18,5 @@
         android:textSize="40sp"
         android:text="Rubik's Cube"
 
-        android:textColor="#000000"/>
+        android:textColor="@color/text2"/>
 </RelativeLayout>

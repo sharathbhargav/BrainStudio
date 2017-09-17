@@ -35,6 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:customTypeface="headingBold"
+                app:titleTextColor="@color/text1"
+                app:subtitleTextColor="@color/text2"
                 android:titleTextColor="#000000"
                 android:subtitleTextColor="#000000"
                 tools:ignore="MissingPrefix"
