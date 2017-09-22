@@ -46,7 +46,7 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="30"
+                    android:layout_weight="20"
                     android:src="@drawable/contactperson"/>
                 <TextView
                     android:layout_width="0dp"
@@ -59,14 +59,21 @@
                     tools:ignore="MissingPrefix"
                     android:textAlignment="center"
                     android:textStyle="bold"
-                    android:textSize="25sp"/>
+                    android:textSize="20sp"/>
 
             </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/contactPerson"
-                android:text="Connect With Us...."
+                android:id="@+id/contactUsAddress"
+                android:text="Address"
+                android:textSize="25dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/contactUsAddress"
+                android:text="Connect With Us"
                 android:id="@+id/contactText"
                 android:gravity="center"
                 app:customTypeface="headingBold"
@@ -113,7 +120,8 @@
                 android:layout_marginTop="15dp"
                 android:id="@+id/callContact"
                 android:layout_centerInParent="true"
-                android:src="@drawable/callus"/>
+                android:src="@drawable/ic_call_white_48dp"
+                android:background="@drawable/call_button"/>
 
 
 

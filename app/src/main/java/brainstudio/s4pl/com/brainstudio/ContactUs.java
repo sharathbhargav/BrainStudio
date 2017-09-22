@@ -17,7 +17,11 @@ import butterknife.ButterKnife;
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class ContactUs extends AppCompatActivity {
 
 
@@ -47,7 +51,7 @@ public class ContactUs extends AppCompatActivity {
         toolbar.setTitle("Contact Us");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        getSupportActionBar().setTitle("Contact Us");
 
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override

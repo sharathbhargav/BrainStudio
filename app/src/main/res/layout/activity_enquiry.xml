@@ -194,7 +194,7 @@
         android:minLines="2"
         android:maxLines="10"
         android:id="@+id/enquiryMessageEdit"
-        android:hint="Enquiry"
+        android:hint="Curious about?"
         />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
@@ -209,7 +209,7 @@
                 android:paddingEnd="10dp"
                 android:drawablePadding="5dp"
                 android:background="@drawable/submit_button_background"
-                android:textColor="@color/textWhite"
+                android:textColor="@color/text1"
                 android:gravity="center"
                 android:text="Submit"/>
         </LinearLayout>

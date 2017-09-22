@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -27,13 +28,18 @@ import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class Event_detail extends AppCompatActivity {
 
     @BindView(R.id.event_detail_collapsing_toolbar)
@@ -55,6 +61,12 @@ public class Event_detail extends AppCompatActivity {
             TextView venue;
     @BindView(R.id.eventDetailRegisterButton)
     Button register;
+    @BindView(R.id.eventDetailLocationButton)
+            ImageView location;
+
+    @BindView(R.id.eventDetailVenueCard)
+    CardView venueCard;
+    String locationString="0,0";
     String phone;
 
     TestLoopAdapter testLoopAdapter;
@@ -66,6 +78,7 @@ public class Event_detail extends AppCompatActivity {
 
 
     String registerString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +142,11 @@ public class Event_detail extends AppCompatActivity {
                     picSlide.add(p1.getValue(String.class));
                     testLoopAdapter.notifyDataSetChanged();
                 }
+
+                locationString=dataSnapshot.child("location").getValue(String.class);
+                location.setVisibility(View.VISIBLE);
+
+
             }
 
             @Override
@@ -150,8 +168,33 @@ public class Event_detail extends AppCompatActivity {
         });
 
 
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr="+locationString));
+                startActivity(intent);
+            }
+        });
+
+        venueCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr="+locationString));
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
 
     }
+
+
+
 
 
     public class TestLoopAdapter extends LoopPagerAdapter {

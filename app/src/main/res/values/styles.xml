@@ -5,7 +5,9 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorSecondary</item>
+        <item name="android:textColorPrimary">@color/text1</item>
+        <item name="android:textColorSecondary">@color/text2</item>
 
     </style>
 
@@ -31,28 +33,29 @@
 
 
     <style name="navView">
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:divider">@color/colorPrimary</item>
+        <item name="android:dividerHorizontal">@color/colorPrimary</item>
+        <item name="android:dividerHeight">5dp</item>
 
-        <item name="android:shadowColor">#ff0000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">2</item>
-        <item name="android:shadowRadius">3</item>
+
+
 
     </style>
 
 
     <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
-        <item name="android:textColor">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
 
 
     </style>
 
     <!--Input field style-->
     <style name="MyEditText" parent="Theme.AppCompat.Light">
-        <item name="colorControlNormal">@color/colorSecondary</item>
-        <item name="colorControlActivated">@color/colorSecondary</item>
-        <item name="android:textColorHint">@color/colorSecondary</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
     </style>
 
 

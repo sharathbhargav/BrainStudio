@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="10dp"
-    android:elevation="5dp"
+    android:elevation="15dp"
     app:cardCornerRadius="5dp">
 
     <RelativeLayout
@@ -18,7 +18,9 @@
             android:textAlignment="center"
             app:customTypeface="headingBold"
             tools:ignore="MissingPrefix"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
+            android:textColor="@color/text2"
+            android:textSize="15dp"
             android:textAllCaps="true"
             android:textStyle="bold"/>
         <RelativeLayout
@@ -45,7 +47,7 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:background="#80ff0000">
+                android:background="@color/colorPrimaryWithAlpha">
                 <Button
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -59,10 +61,10 @@
                     android:layout_height="30dp"
                     android:background="@drawable/facebookshare"
                     android:id="@+id/facebookShare"
-                   android:layout_above="@id/watsupShare"
+                    android:layout_above="@id/watsupShare"
                     android:layout_marginBottom="30dp"
                     android:layout_centerHorizontal="true"
-                   />
+                    />
                 <Button
                     android:layout_width="30dp"
                     android:layout_height="30dp"

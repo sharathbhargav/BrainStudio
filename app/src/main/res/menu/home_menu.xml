@@ -49,5 +49,15 @@
         android:title="Enquiry"
         android:icon="@drawable/ic_help_white_36dp"/>
 
+    <group
+        android:enabled="true">
+    <item android:id="@+id/menu_legal"
+        android:title="Legal"
+        android:icon="@drawable/ic_code_white_36dp"
+        />
+
+    </group>
+
+
 
 </menu>

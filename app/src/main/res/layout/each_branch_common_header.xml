@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSecondaryDark">
+    android:background="@color/colorSecondary">
 
     <TextView
         android:layout_width="wrap_content"
@@ -15,8 +15,9 @@
         app:customTypeface="headingBold"
         tools:ignore="MissingPrefix"
         android:gravity="center"
-        android:textSize="40sp"
-        android:text="Rubik's Cube"
+        android:textSize="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
 
         android:textColor="@color/text2"/>
 </RelativeLayout>

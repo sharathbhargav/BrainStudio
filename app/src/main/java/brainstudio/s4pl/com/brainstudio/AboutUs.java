@@ -1,5 +1,6 @@
 package brainstudio.s4pl.com.brainstudio;
 
+import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +32,13 @@ import butterknife.ButterKnife;
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+import static java.security.AccessController.getContext;
+
+@Keep
+@KeepClassMembers
 public class AboutUs extends AppCompatActivity {
 
 
@@ -57,7 +64,7 @@ public class AboutUs extends AppCompatActivity {
 
         ArcConfiguration configuration = new ArcConfiguration(getApplicationContext());
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
-        collapsingTool.setTitle("About Us");
+
 
 
         configuration.setText("Please wait..");

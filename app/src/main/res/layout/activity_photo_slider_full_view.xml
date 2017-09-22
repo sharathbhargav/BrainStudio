@@ -23,14 +23,15 @@
             android:layout_height="match_parent"
             android:visibility="gone"
             android:id="@+id/downloadProgressContainer"
-            android:background="#36ff0000">
+            android:background="@color/colorSecondaryLightWithAlphaLighter">
 
            <com.fenjuly.library.ArrowDownloadButton
                android:id="@+id/imageListDownloadButtonFullView"
               android:layout_centerInParent="true"
                android:layout_width="150dp"
                android:layout_height="150dp"
-               android:background="@color/colorPrimary"
+
+               android:background="@color/colorSecondaryLightWithAlphaLighter"
 
                />
         </RelativeLayout>
@@ -40,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
-        android:background="#90CAF9">
+        android:background="@color/colorPrimaryLight">
         <Button
             android:layout_width="40dp"
             android:id="@+id/fullViewOthersShare"

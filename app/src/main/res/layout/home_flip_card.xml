@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:animateFirstView="true"
         android:autoStart="true"
-        android:flipInterval="3000"
+
         app:animationDuration="100"
         app:frontLayout="@layout/home_flip_front_layout"
         app:rearLayout="@layout/home_flip_back_layout"

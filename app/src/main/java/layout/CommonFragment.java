@@ -34,6 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +45,9 @@ import cat.ppicas.customtypeface.CustomTypefaceFactory;
  * Use the {@link CommonFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+@Keep
+@KeepClassMembers
 public class CommonFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -285,7 +290,7 @@ public class CommonFragment extends Fragment {
 
             Glide.with(getContext())
                     .load(list.get(position).link)
-                    .thumbnail(Glide.with(getContext()).load(R.drawable.ring))
+                    .thumbnail(Glide.with(getContext()).load(R.drawable.thumbnail))
                     .centerCrop()
                     .into(holder.gridCardImage);
             holder.gridCardText.setText(list.get(position).name);

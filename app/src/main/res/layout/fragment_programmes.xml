@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/section_label"
         android:layout_width="120dp"
-        android:background="#00E676"
+
         android:layout_height="wrap_content" />
 
 </HorizontalScrollView>

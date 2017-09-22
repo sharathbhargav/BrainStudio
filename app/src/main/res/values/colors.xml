@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#a4cabc</color>
-    <color name="colorPrimaryDark">#75998c</color>
-    <color name="colorPrimaryLight">#d6fdee</color>
+    <color name="colorPrimary">#ff2657</color>
+    <color name="colorPrimaryDark">#c4002f</color>
+    <color name="colorPrimaryLight">#ff6883</color>
+    <color name="colorPrimaryWithAlpha">#80ff2657</color>
 
-    <color name="colorSecondary">#b2473e</color>
-    <color name="colorSecondaryDark">#7d1617</color>
-    <color name="colorSecondaryLight">#e87669</color>
 
-    <color name="colorAccent">#0091ea</color>
+
+    <color name="colorSecondary">#09ff2f</color>
+    <color name="colorSecondaryDark">#008a00</color><!--originally 00ca00-->
+    <color name="colorSecondaryLight">#71ff69</color>
+    <color name="colorSecondaryLightWithAlpha">#8071ff69</color>
+    <color name="colorSecondaryLightWithAlphaLighter">#2071ff69</color>
+
     <color name="text1">#ffffff</color>
     <color name="text2">#000000</color>
 
 
-    <color name="comedyRed">#F44336</color>
-    <color name="textWhite">#ffffff</color>
-    <color name="textBlack">#000000</color>
+    <color name="colorAccent">#ffffffff</color>
+
     <array name="audioLoader">
         <item>#ffffff</item>
         <item>#00fff0</item>

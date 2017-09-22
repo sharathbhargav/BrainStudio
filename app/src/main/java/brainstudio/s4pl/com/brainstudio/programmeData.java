@@ -1,9 +1,14 @@
 package brainstudio.s4pl.com.brainstudio;
 
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
+
 /**
  * Created by SharathBhargav on 17-09-2017.
  */
 
+@Keep
+@KeepClassMembers
 public class programmeData {
 
    public String cubeInfo,cubeBenifits,jugglingInfo,jugglingBenifits,graphoInfo,graphoBenifits,stackInfo,stackBenifits,

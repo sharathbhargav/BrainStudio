@@ -1,6 +1,7 @@
 package brainstudio.s4pl.com.brainstudio;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -73,11 +74,15 @@ import julianfalcionelli.magicform.validation.ValidationMaxLength;
 import julianfalcionelli.magicform.validation.ValidationMinLength;
 import julianfalcionelli.magicform.validation.ValidationNotEmpty;
 import julianfalcionelli.magicform.validation.ValidationRegex;
-import pl.bclogic.pulsator4droid.library.PulsatorLayout;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
+
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+@Keep
+@KeepClassMembers
 public class feedback extends AppCompatActivity  {
 
     @BindView(R.id.feedback_toolbar)
@@ -133,9 +138,10 @@ public class feedback extends AppCompatActivity  {
         ButterKnife.bind(this);
         Fabric.with(this, new Crashlytics());
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Enquiry");
+        toolbar.setTitle("Feedback");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Feedback");
         helper=new PermissionsHelper(feedback.this);
         mDialog = new SimpleArcDialog(this);
         dialogBuilder=NiftyDialogBuilder.getInstance(this);
@@ -213,8 +219,8 @@ public class feedback extends AppCompatActivity  {
                 .withDividerColor("#11000000")                              //def
                 .withMessage("How would you like to give your feedback")                     //.withMessage(null)  no Msg
                 .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-                .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)
-                .withIcon(R.drawable.aboutus)
+                .withDialogColor("#9c27b0")                               //def  | withDialogColor(int resid)
+
                 .withDuration(700)                                          //def
                 .withEffect(Effectstype.Flipv)                                         //def Effectstype.Slidetop
                 .withButton1Text("Type")                                      //def gone
@@ -363,7 +369,7 @@ public class feedback extends AppCompatActivity  {
             each.child("msg").setValue(messageEdit.getText().toString());
             String msg=nameEdit.getText().toString()+"\n"+phoneEdit.getText().toString()+"\n"+messageEdit.getText().toString()+"\n"+course+"\n"
                     +centre;
-            sendMail(msg);
+            sendMail(msg,nameEdit.getText().toString());
         }
 
 
@@ -385,7 +391,7 @@ public class feedback extends AppCompatActivity  {
                             +centre;
 
 
-                    sendMail(msg);
+                    sendMail(msg,nameEdit.getText().toString());
                 }
             });
             task.addOnFailureListener(new OnFailureListener() {
@@ -405,15 +411,15 @@ public class feedback extends AppCompatActivity  {
 
     }
 
-    void sendMail(String msg)
+    void sendMail(String msg,String name)
     {
 
 
         BackgroundMail.newBuilder(feedback.this)
                 .withUsername("brainstudios4pl@gmail.com")
                 .withPassword("aokijikuzan")
-                .withSenderName("Your sender name")
-                .withMailTo("tssuhas18@gmail.com")
+                .withSenderName(name)
+                .withMailTo("brainstudios4pl@gmail.com")
                 .withProcessVisibility(false)
 
                 .withType(BackgroundMail.TYPE_PLAIN)
@@ -461,7 +467,7 @@ public class feedback extends AppCompatActivity  {
                 .addField(new FormField(phoneEdit)
                         .addValidation(new ValidationNotEmpty().setMessage("Phone number required"))
                         .addValidation(new ValidationRegex(Patterns.PHONE).setMessage("Phone number required"))
-                        .addValidation(new ValidationMinLength(8).setMessage("Please enter valid phone number"))
+                        .addValidation(new ValidationMinLength(10).setMessage("Please enter valid phone number"))
                         .addValidation(new ValidationMaxLength(10).setMessage("Please enter valid phone number")))
                 .setListener(new ValidatorCallbacks() {
                     @Override

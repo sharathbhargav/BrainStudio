@@ -33,7 +33,11 @@ import julianfalcionelli.magicform.validation.ValidationMaxLength;
 import julianfalcionelli.magicform.validation.ValidationMinLength;
 import julianfalcionelli.magicform.validation.ValidationNotEmpty;
 import julianfalcionelli.magicform.validation.ValidationRegex;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class Enquiry extends AppCompatActivity {
 
     @BindView(R.id.enquiry_toolbar)

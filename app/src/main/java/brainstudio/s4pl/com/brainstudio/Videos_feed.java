@@ -38,7 +38,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.mateware.snacky.Snacky;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class Videos_feed extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -206,7 +210,7 @@ public class Videos_feed extends Fragment {
         {
             Glide.with(Videos_feed.this)
                     .load(urlPart1+videoIds.get(position)+urlPart2)
-                    .thumbnail(Glide.with(getContext()).load(R.drawable.ring))
+                    .thumbnail(Glide.with(getContext()).load(R.drawable.thumbnail).centerCrop())
                     .centerCrop()
                     .into(holder.thumbNail);
 

@@ -43,6 +43,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
 
 /**
@@ -53,6 +55,10 @@ import cat.ppicas.customtypeface.CustomTypefaceFactory;
  * Use the {@link Images_feed#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+@Keep
+@KeepClassMembers
+
 public class Images_feed extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -166,8 +172,9 @@ public class Images_feed extends Fragment {
         {
             Glide.with(Images_feed.this)
                     .load(urlsList.get(position))
-                    .thumbnail(Glide.with(getContext()).load(R.drawable.ring))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+
+                    .centerCrop()
+                    .thumbnail(Glide.with(getContext()).load(R.drawable.thumbnail).centerCrop())
                     .centerCrop()
                     .into(holder.imageListCardImageView);
 

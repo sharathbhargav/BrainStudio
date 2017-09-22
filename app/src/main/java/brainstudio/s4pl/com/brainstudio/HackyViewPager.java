@@ -5,10 +5,15 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
+
 /**
  * Created by Suhas on 8/29/2017.
  */
 
+@Keep
+@KeepClassMembers
 public class
 HackyViewPager extends ViewPager {
 

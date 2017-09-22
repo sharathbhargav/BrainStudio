@@ -9,11 +9,12 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+       // multiDexEnabled = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -74,8 +75,7 @@ dependencies {
     //https://android-arsenal.com/details/1/4099
     compile 'com.github.adrielcafe:AndroidAudioRecorder:0.3.0'
 
-    //https://android-arsenal.com/details/1/3873#!description
-    compile 'pl.bclogic:pulsator4droid:1.0.3'
+
 
     //https://android-arsenal.com/details/1/772
     compile 'com.github.sd6352051:NiftyDialogEffects:1.0.0'
@@ -93,6 +93,12 @@ dependencies {
 
     //https://android-arsenal.com/details/1/5404     permissions
     compile 'com.neurenor:permission-helper:1.0.1'
+
+    //multidex
+  //  compile 'com.android.support:multidex:1.0.1'
+    //https://android-arsenal.com/details/1/1833
+    compile "com.infstory:proguard-annotations:1.0.2"
+
 
     //crashnalytics
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {

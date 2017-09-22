@@ -49,11 +49,15 @@ import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import eu.davidea.flipview.FlipView;
 import io.fabric.sdk.android.Fabric;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 import rm.com.clocks.ClockDrawable;
 import rm.com.clocks.ClockImageView;
 import rm.com.clocks.Stroke;
 
 
+@Keep
+@KeepClassMembers
 public class Home extends AppCompatActivity {
 
 
@@ -163,6 +167,11 @@ public class Home extends AppCompatActivity {
                         drawer.closeDrawers();
                         Intent toAbout=new Intent(getApplicationContext(),AboutUs.class);
                         startActivity(toAbout);
+                        break;
+                    case R.id.menu_legal:
+                        drawer.closeDrawers();
+                        Intent toLegal=new Intent(getApplicationContext(),legal.class);
+                        startActivity(toLegal);
                         break;
 
                 }
@@ -312,6 +321,12 @@ public class Home extends AppCompatActivity {
             @Override
             public void onFlipped(FlipView flipView, boolean checked) {
                 final  boolean j=checked;
+                if(!j)
+                {
+                    flipView.setFlipInterval(10*1000);
+                }
+                else
+                flipView.setFlipInterval(5*1000);
                 clocks.start();
                 clocks2.start();
                 Handler handler = new Handler();
@@ -391,7 +406,7 @@ public class Home extends AppCompatActivity {
             Glide.with(getApplicationContext())
                     .load(centerList.get(position).img)
                     .centerCrop()
-                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
+                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.thumbnail).centerCrop())
                     .into(imageView);
 
 

@@ -40,7 +40,11 @@ import butterknife.ButterKnife;
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class eachBranchDetail extends AppCompatActivity {
 
        @BindView(R.id.collapsing_toolbar)
@@ -376,7 +380,7 @@ ArrayList<String> picSlide=new ArrayList<>();
                     EachBranchCardCommonClass temp=new EachBranchCardCommonClass();
                     Log.v("fire",type);
                     temp.img=d.child("img").getValue(String.class);
-                    temp.cost=d.child("cost").getValue(Integer.class);
+                    temp.cost=d.child("cost").getValue(String.class);
                     temp.head=d.child("name").getValue(String.class);
                     list.add(temp);
                     if(mDialog.isShowing())
@@ -464,7 +468,7 @@ ArrayList<String> picSlide=new ArrayList<>();
             holder.heading.setText(eachList.get(position).head);
             Glide.with(getApplicationContext())
                     .load(eachList.get(position).img)
-                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
+                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.thumbnail))
                     .centerCrop()
                     .into(holder.img);
             holder.day.setText(dayString);

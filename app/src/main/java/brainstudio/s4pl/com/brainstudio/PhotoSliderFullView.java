@@ -44,11 +44,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.mateware.snacky.Snacky;
 import de.mateware.snacky.SnackyUtils;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission_group.STORAGE;
 
+@Keep
+@KeepClassMembers
 public class PhotoSliderFullView extends AppCompatActivity {
     @BindView(R.id.photosliderFullView)
     HackyViewPager photoSliderFullView;
@@ -224,6 +228,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
 
         } else {
             progressContainer.setVisibility(View.VISIBLE);
+
             downloadProgress.startAnimating();
             FileDownloadTask task = sharePhotoRef.getFile(localFile);
             task.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -273,7 +278,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
             PhotoView photoView = new PhotoView(container.getContext());
             Glide.with(getApplicationContext())
                     .load(urlList.get(position))
-                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.ring))
+                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.thumbnail))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .fitCenter()
                     .into(photoView);

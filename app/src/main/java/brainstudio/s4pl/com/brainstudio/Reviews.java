@@ -42,7 +42,11 @@ import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import de.mateware.snacky.Snacky;
 import io.fabric.sdk.android.Fabric;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class Reviews extends AppCompatActivity {
 
     @BindView(R.id.reviewRecycler)
@@ -80,13 +84,14 @@ public class Reviews extends AppCompatActivity {
                 .withTitle("Audio Review")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
-               // .withMessage("How would you like to give your feedback")                     //.withMessage(null)  no Msg
-               // .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-                .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)
+                                //.withMessage(null)  no Msg
+                .withMessageColor("#FFFFFF")                              //def  | withMessageColor(int resid)
+                .withDialogColor("#9c27b0")                           //def  | withDialogColor(int resid)
 
                 .withDuration(700)                                          //def
                                                   //def gone
-                .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
+                .isCancelableOnTouchOutside(false)
+                .isCancelable(false)                                                 //def    | isCancelable(true)
                 .setCustomView(R.layout.audio_dialog,getBaseContext());       // .setCustomView(View or ResId,context
 
         reviewRecycler.setLayoutManager(layoutManager);
@@ -290,7 +295,7 @@ public class Reviews extends AppCompatActivity {
                                 return false;
                             }
                         });
-                        mp.setDataSource("https://firebasestorage.googleapis.com/v0/b/brainstudio-a7a21.appspot.com/o/123.wav?alt=media&token=ea2263db-48f2-4562-a14a-1ea97256c3fc");
+                        mp.setDataSource(reviewDatas.get(position).message);
                         mp.prepareAsync();
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override

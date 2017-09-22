@@ -18,6 +18,8 @@
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:id="@+id/eachBranchCardImage"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_vertical"
         />
 
     <RelativeLayout
@@ -30,10 +32,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/eachBranchCardHeading"
             app:customTypeface="headingBold"
-            android:textColor="@color/colorSecondary"
+            android:textColor="@color/colorPrimary"
             tools:ignore="MissingPrefix"
             android:gravity="center"
-            android:textSize="40sp"
+            android:textSize="30dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
 
@@ -41,7 +43,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="3dp"
             android:id="@+id/eachBranchCardDayLinear"
             android:layout_below="@id/eachBranchCardHeading"
             android:orientation="horizontal">
@@ -49,12 +52,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Active Days: "
-                android:textColor="@color/colorSecondary"/>
+                android:textSize="@dimen/eachBranchEachCourseTextSize"
+                android:textColor="@color/colorSecondaryDark"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eachBranchCardDay"
             android:textAllCaps="true"
+            android:textSize="@dimen/eachBranchEachCourseTextSize"
             android:gravity="bottom|left"
             app:customTypeface="subHeadingBold"
             tools:ignore="MissingPrefix"
@@ -65,18 +70,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eachBranchCardTimeLinear"
-            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="3dp"
             android:layout_below="@id/eachBranchCardDayLinear"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Active hours: "
-                android:textColor="@color/colorSecondary"/>
+                android:textSize="@dimen/eachBranchEachCourseTextSize"
+                android:textColor="@color/colorSecondaryDark"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eachBranchCardTime"
+            android:textSize="@dimen/eachBranchEachCourseTextSize"
             app:customTypeface="subHeadingBold"
             tools:ignore="MissingPrefix"
             android:gravity="bottom|right"
@@ -88,17 +96,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
             android:layout_below="@id/eachBranchCardTimeLinear">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fee: "
-                android:textColor="@color/colorSecondary"/>
+                android:textSize="@dimen/eachBranchEachCourseTextSize"
+                android:text="Course Fee: "
+                android:textColor="@color/colorSecondaryDark"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:customTypeface="subHeadingBold"
+            android:textSize="@dimen/eachBranchEachCourseTextSize"
             tools:ignore="MissingPrefix"
             android:id="@+id/eachBranchCardCost"
             />

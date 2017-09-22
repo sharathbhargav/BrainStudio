@@ -28,7 +28,11 @@ import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
 import io.fabric.sdk.android.Fabric;
 import layout.CommonFragment;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class Programmes extends AppCompatActivity implements CommonFragment.OnFragmentInteractionListener{
 
     /**

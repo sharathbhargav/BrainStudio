@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
 
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -14,6 +14,8 @@
     app:customTypeface="subHeadingBold"
     tools:ignore="MissingPrefix"
     android:layout_margin="5dp"
+    android:textSize="15dp"
+    android:textColor="@color/text1"
     android:id="@+id/audioDialogName"
     android:layout_centerHorizontal="true"/>
     <com.leo.simplearcloader.SimpleArcLoader
@@ -21,19 +23,17 @@
         android:id="@+id/audioLoader"
         android:layout_below="@id/audioDialogName"
         android:layout_width="60dp"
-        custom:arc_colors="@array/audioLoader"
+
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
-        custom:arc_style="simple_arc"
-        custom:arc_speed="medium"
-        custom:arc_margin="3dp">
+      >
     </com.leo.simplearcloader.SimpleArcLoader>
     <SeekBar
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:progressBackgroundTint="@color/colorSecondaryLight"
-        android:progressTint="@color/colorSecondaryDark"
+    android:progressBackgroundTint="@color/colorPrimaryLight"
+        android:progressTint="@color/colorPrimaryDark"
                 android:layout_below="@id/audioLoader"
         android:id="@+id/audioSeekBar" />
 </RelativeLayout>

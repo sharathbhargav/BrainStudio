@@ -22,7 +22,11 @@ import android.widget.TextView;
 
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMembers;
 
+@Keep
+@KeepClassMembers
 public class Images_VideosList extends AppCompatActivity implements Videos_feed.OnFragmentInteractionListener,Images_feed.OnFragmentInteractionListener {
 
     /**

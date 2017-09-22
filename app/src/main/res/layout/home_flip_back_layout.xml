@@ -14,10 +14,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             app:customTypeface="subHeadingBold"
             tools:ignore="MissingPrefix"
-            android:text="Address"
+            android:textSize="17dp"
             android:textColor="@color/text2"
             android:id="@+id/home_card_back_address"
             />
@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="70"
+            android:gravity="center"
             android:id="@+id/home_back_day_layout">
 
 
@@ -82,30 +83,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:layout_marginTop="5dp"
+
     android:weightSum="100">
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="30"
-        app:customTypeface="subHeadingBold"
+        android:layout_weight="40"
+        app:customTypeface="headingBold"
+        android:textSize="20dp"
         tools:ignore="MissingPrefix"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorSecondaryDark"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Active hours"/>
+        android:text="Active Hours"/>
 
 <RelativeLayout
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="25"
-    android:layout_marginRight="30dp">
+    android:layout_marginStart="2dp"
+    android:layout_marginEnd="10dp"
+    >
 
         <rm.com.clocks.ClockImageView
             android:id="@+id/clock1"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="80dp"
 
             app:hours="16"
 
@@ -123,25 +127,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-    android:layout_alignBottom="@id/clock1"
+
         app:customTypeface="subHeadingBold"
+        android:layout_alignParentBottom="true"
+        android:textSize="15dp"
         tools:ignore="MissingPrefix"
         android:layout_centerHorizontal="true"
         android:id="@+id/home_card_clock1_text"
-        android:background="@color/colorPrimary"
-        android:textColor="#ffffff"
-        android:text="04:25"/>
+
+        android:textColor="@color/colorSecondaryDark"
+       />
 
 </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="25"
-        android:layout_marginRight="30dp">
+        >
+
         <rm.com.clocks.ClockImageView
             android:id="@+id/clock2"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="80dp"
 
             app:hours="16"
             app:minutes="20"
@@ -157,13 +165,15 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             app:customTypeface="subHeadingBold"
+            android:textSize="15dp"
+            android:layout_alignParentBottom="true"
             tools:ignore="MissingPrefix"
-            android:layout_alignBottom="@id/clock2"
+
             android:layout_centerHorizontal="true"
             android:id="@+id/home_card_clock2_text"
-            android:background="@color/colorPrimary"
-            android:textColor="#ffffff"
-            android:text="04:25"/>
+
+            android:textColor="@color/colorSecondaryDark"
+           />
 </RelativeLayout>
 </LinearLayout>
     </LinearLayout>
