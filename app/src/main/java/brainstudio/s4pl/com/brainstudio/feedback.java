@@ -38,6 +38,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.keiferstone.nonet.Configuration;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
+import com.keiferstone.nonet.NoNet;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
@@ -111,7 +115,7 @@ public class feedback extends AppCompatActivity  {
 
     String course,centre;
     ArrayList<String> centreList=new ArrayList<>();
-    ArrayList<String> courseList=new ArrayList<>(Arrays.asList("Rubik's cube","Juggling","Scientific Handwriting","Speed Stacking","Calligraphy","Corporate Training"));
+    ArrayList<String> courseList=new ArrayList<>(Arrays.asList("Rubik's cube","Juggling","Scientific Handwriting","Speed Stacking","Calligraphy","Corporate Training","Handwriting Analysis"));
     DatabaseReference parent,feedbackRef;
     MagicForm magicForm;
     boolean valid=false;
@@ -126,7 +130,8 @@ public class feedback extends AppCompatActivity  {
     StorageReference mainRef;
     PermissionsHelper helper;
 
-
+    //Monitor monitor;
+    boolean netLost=false;
 
 
     @Override
@@ -146,6 +151,37 @@ public class feedback extends AppCompatActivity  {
         mDialog = new SimpleArcDialog(this);
         dialogBuilder=NiftyDialogBuilder.getInstance(this);
 
+
+        final Configuration config= NoNet.configure()
+                .endpoint("https://google.com")
+                .timeout(5)
+                .connectedPollFrequency(10)
+                .disconnectedPollFrequency(3)
+                .build();
+        NoNet.monitor(this)
+                .configure(config)
+                .poll()
+                .callback(new Monitor.Callback() {
+                    @Override
+                    public void onConnectionEvent(int connectionStatus) {
+
+                        if(connectionStatus== ConnectionStatus.DISCONNECTED && !netLost)
+                        {
+                            netLost=true;
+
+                            Intent offLine=new Intent(getApplicationContext(),OfflineActivity.class);
+                            startActivity(offLine);
+
+                        }
+                        if(connectionStatus==ConnectionStatus.CONNECTED)
+                            netLost=false;
+
+
+                    }
+                });
+       NoNet.check(this).start();
+
+
         ArcConfiguration configuration = new ArcConfiguration(getApplicationContext());
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
         configuration.setText("Please wait..");
@@ -155,13 +191,14 @@ public class feedback extends AppCompatActivity  {
         mDialog.show();
 
         parent= FirebaseDatabase.getInstance().getReference("centre");
-        mainRef=FirebaseStorage.getInstance().getReferenceFromUrl("gs://brainstudio-a7a21.appspot.com");
+        mainRef=FirebaseStorage.getInstance().getReferenceFromUrl("gs://brainstudio-a7a21.appspot.com/feedbackAudio");
         parent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot d:dataSnapshot.getChildren())
                 {
-                    centreList.add(d.getKey());
+                    String cen=d.child("name").getValue(String.class);
+                    centreList.add(cen);
                 }
                 mDialog.dismiss();
                 centreSpinner.setItems(centreList);
@@ -246,47 +283,21 @@ public class feedback extends AppCompatActivity  {
                     public void onClick(View v) {
 
                         dialogBuilder.dismiss();
-                        if (helper.isPermissionGranted(RECORD_AUDIO)) {
-                            submit.setVisibility(View.VISIBLE);
-                            fileType = 1;
-                            startRecording();
+                        if(helper.isPermissionGranted(WRITE_EXTERNAL_STORAGE))
+                        {
+                            if (helper.isPermissionGranted(RECORD_AUDIO))
+                            {
+                                submit.setVisibility(View.VISIBLE);
+                                fileType = 1;
+                                startRecording();
+                            }
+                            else
+                            {
+                                requestAudioPermission();
+                            }
                         }
-                        else {
-                            helper.requestPermissions(new String[]{RECORD_AUDIO}, new PermissionCallback() {
-                                @Override
-                                public void onResponseReceived(HashMap<String, PermissionsHelper.PermissionGrant> mapPermissionGrants) {
-                                    PermissionsHelper.PermissionGrant permissionGrant = mapPermissionGrants
-                                            .get(RECORD_AUDIO);
-                                    switch (permissionGrant) {
-                                        case GRANTED:
-                                            submit.setVisibility(View.VISIBLE);
-                                            fileType=1;
-                                            startRecording();
-                                            break;
-                                        case DENIED:
-                                            Snacky.builder()
-                                                    .setActivty(feedback.this)
-                                                    .setText("Permission required to continue." )
-                                                    .setDuration(Snacky.LENGTH_LONG)
-                                                    .error()
-                                                    .show();
-                                            next.setVisibility(View.VISIBLE);
-                                            break;
-                                        case NEVERSHOW:
-                                            Snacky.builder()
-                                                    .setActivty(feedback.this)
-                                                    .setText("Permission required to continue." )
-                                                    .setDuration(Snacky.LENGTH_LONG)
-                                                    .error()
-                                                    .show();
-                                            next.setVisibility(View.VISIBLE);
-                                            break;
-
-
-                                    }
-                                }
-                            });
-                        }
+                        else
+                            requestStoragePermission();
 
                     }
                 });
@@ -326,6 +337,84 @@ public class feedback extends AppCompatActivity  {
 
 
 
+    }
+    void requestAudioPermission()
+    {
+        helper.requestPermissions(new String[]{RECORD_AUDIO}, new PermissionCallback() {
+            @Override
+            public void onResponseReceived(HashMap<String, PermissionsHelper.PermissionGrant> mapPermissionGrants) {
+                PermissionsHelper.PermissionGrant permissionGrant = mapPermissionGrants
+                        .get(RECORD_AUDIO);
+                switch (permissionGrant) {
+                    case GRANTED:
+                        submit.setVisibility(View.VISIBLE);
+                        fileType = 1;
+                        startRecording();
+                        break;
+                    case DENIED:
+                        Snacky.builder()
+                                .setActivty(feedback.this)
+                                .setText("Permission required to continue.")
+                                .setDuration(Snacky.LENGTH_LONG)
+                                .error()
+                                .show();
+                        next.setVisibility(View.VISIBLE);
+                        break;
+                    case NEVERSHOW:
+                        Snacky.builder()
+                                .setActivty(feedback.this)
+                                .setText("Permission required to continue.")
+                                .setDuration(Snacky.LENGTH_LONG)
+                                .error()
+                                .show();
+                        next.setVisibility(View.VISIBLE);
+                        break;
+
+
+                }
+            }
+        });
+
+    }
+    void requestStoragePermission()
+    {
+        helper.requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, new PermissionCallback() {
+            @Override
+            public void onResponseReceived(HashMap<String, PermissionsHelper.PermissionGrant> mapPermissionGrants) {
+                PermissionsHelper.PermissionGrant permissionGrant = mapPermissionGrants
+                        .get(WRITE_EXTERNAL_STORAGE);
+                switch (permissionGrant) {
+                    case GRANTED:
+                        if(helper.isPermissionGranted(RECORD_AUDIO)) {
+                            submit.setVisibility(View.VISIBLE);
+                            fileType = 1;
+                            startRecording();
+                        }
+                        else
+                            requestAudioPermission();
+                        break;
+                    case DENIED:
+                        Snacky.builder()
+                                .setActivty(feedback.this)
+                                .setText("Permission required to continue.")
+                                .setDuration(Snacky.LENGTH_LONG)
+                                .error()
+                                .show();
+                        next.setVisibility(View.VISIBLE);
+                        break;
+                    case NEVERSHOW:
+                        Snacky.builder()
+                                .setActivty(feedback.this)
+                                .setText("Permission required to continue.")
+                                .setDuration(Snacky.LENGTH_LONG)
+                                .error()
+                                .show();
+                        next.setVisibility(View.VISIBLE);
+                        break;
+
+                }
+            }
+        });
     }
 
 

@@ -163,7 +163,7 @@
 
         android:layout_margin="5dp"
         android:id="@+id/enquiryLocationEdit"
-        android:hint="Locality"/>
+        android:hint="Area"/>
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
     <LinearLayout
@@ -179,25 +179,41 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_help_black_24dp"
             android:layout_margin="5dp"/>
-        <android.support.design.widget.TextInputLayout
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/enquirySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:hintTextAppearance="@style/MyHintText"
+            app:ms_text_color="@color/colorPrimary"
+            android:textSize="15dp"
 
-            >
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="start"
-        android:inputType="textMultiLine"
-        android:theme="@style/MyEditText"
-        android:minLines="2"
-        android:maxLines="10"
-        android:id="@+id/enquiryMessageEdit"
-        android:hint="Curious about?"
-        />
-        </android.support.design.widget.TextInputLayout>
+
+            app:ms_arrow_tint="#311B92"
+            android:background="@drawable/edit_text_border"/>
+
     </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/MyHintText"
+                android:id="@+id/enquiryMessageWrapper"
+                android:visibility="gone"
+
+
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:inputType="textMultiLine"
+                    android:theme="@style/MyEditText"
+                    android:minLines="2"
+                    android:maxLines="10"
+                    android:visibility="gone"
+                    android:id="@+id/enquiryMessageEdit"
+                    android:hint="Curious about?"
+                    />
+            </android.support.design.widget.TextInputLayout>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

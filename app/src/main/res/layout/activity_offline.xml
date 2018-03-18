@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_offline"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="brainstudio.s4pl.com.brainstudio.OfflineActivity">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/connectionlost"
+        android:layout_centerVertical="true"
+        android:id="@+id/offlineImage"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/offlineImage"
+        android:gravity="center"
+        android:textSize="23dp"
+        android:id="@+id/offlineText"
+        android:textAlignment="center"
+
+        android:text="No internet connection found."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/offlineText"
+        android:gravity="center"
+        android:textSize="23dp"
+        android:id="@+id/offlineText2"
+        android:textAlignment="center"
+
+        android:text="Check your connection."/>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Go Online"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/offlineText2"
+        android:id="@+id/goBackOnline"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:id="@+id/offlineExit"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/offlineText2"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

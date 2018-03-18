@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="brainstudio.s4pl.com.brainstudio.RegistrationActivity">
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/registration_appbar"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/registration_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            />
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintTextAppearance="@style/MyHintText"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:hint="Wowian Name"
+
+                    >
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:id="@+id/RegistrationNameEdit"
+
+                        android:textSize="@dimen/edit_text_size"
+                        android:theme="@style/MyEditText"
+                        android:inputType="textCapWords"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/registrationGender"
+                    android:layout_weight="50"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:hintTextAppearance="@style/MyHintText"
+                    android:layout_weight="50"
+                    android:hint="Standard Studying"
+
+                    >
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:id="@+id/RegistrationStandardEdit"
+
+                        android:textSize="@dimen/edit_text_size"
+                        android:theme="@style/MyEditText"
+                        android:inputType="textCapWords"
+                        />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/MyHintText"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="School"
+
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:id="@+id/RegistrationSchoolEdit"
+
+                    android:textSize="@dimen/edit_text_size"
+                    android:theme="@style/MyEditText"
+                    android:inputType="textCapWords"
+                    />
+            </android.support.design.widget.TextInputLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="100">
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/registrationDateSelectButton"
+                android:text="Set Date of Birth"
+                android:layout_weight="40"
+                android:textColor="#000000"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="60"
+        android:textSize="20dp"
+        android:id="@+id/registrationDateDisplay"/>
+</LinearLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    app:hintTextAppearance="@style/MyHintText"
+
+                    android:hint="Father's Name"
+                    >
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/registrationFatherNameEdit"
+
+                        android:theme="@style/MyEditText"
+                        android:textSize="@dimen/edit_text_size"
+
+
+                        android:inputType="textPersonName"/>
+                </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:hintTextAppearance="@style/MyHintText"
+
+                android:hint="Father's Profession"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/registrationFatherProfessionEdit"
+
+                    android:theme="@style/MyEditText"
+                    android:textSize="@dimen/edit_text_size"
+
+
+                    android:inputType="text"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:hintTextAppearance="@style/MyHintText"
+
+                android:hint="Father's phone number"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/registrationFatherPhoneEdit"
+
+                    android:theme="@style/MyEditText"
+                    android:textSize="@dimen/edit_text_size"
+
+
+                    android:inputType="phone"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:hintTextAppearance="@style/MyHintText"
+
+                android:hint="Mother's Name"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/registrationMotherNameEdit"
+
+                    android:theme="@style/MyEditText"
+                    android:textSize="@dimen/edit_text_size"
+
+
+                    android:inputType="textPersonName"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:hintTextAppearance="@style/MyHintText"
+
+                android:hint="Mother's Profession"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/registrationMotherProfessionEdit"
+
+                    android:theme="@style/MyEditText"
+                    android:textSize="@dimen/edit_text_size"
+
+
+                    android:inputType="text"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:hintTextAppearance="@style/MyHintText"
+
+                android:hint="Mother's Phone number"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/registrationMotherPhoneEdit"
+
+                    android:theme="@style/MyEditText"
+                    android:textSize="@dimen/edit_text_size"
+
+
+                    android:inputType="phone"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:hintTextAppearance="@style/MyHintText"
+
+                android:hint="Mother's Name"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/registrationResedentialPhoneEdit"
+
+                    android:theme="@style/MyEditText"
+                    android:textSize="@dimen/edit_text_size"
+
+
+                    android:inputType="phone"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:hintTextAppearance="@style/MyHintText"
+
+                android:hint="Email address"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/registrationEmailEdit"
+
+                    android:theme="@style/MyEditText"
+                    android:textSize="@dimen/edit_text_size"
+
+
+                    android:inputType="textEmailAddress"/>
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginStart="5dp"
+                    android:text="Area"/>
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/registrationSpinnerCentre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:ms_text_color="@color/colorPrimary"
+                    android:textSize="15dp"
+                    app:ms_arrow_tint="@color/colorSecondaryDark"
+                    android:background="@drawable/edit_text_border"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Skills"
+                android:textSize="20dp"/>
+            <Spinner
+                android:id="@+id/registrationSkillsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+
+
+
+    </ScrollView>
+</LinearLayout>

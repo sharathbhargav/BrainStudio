@@ -11,4 +11,5 @@ import proguard.annotation.KeepClassMembers;
 @KeepClassMembers
 public class EachProgramCardData {
     public String link,name;
+
 }

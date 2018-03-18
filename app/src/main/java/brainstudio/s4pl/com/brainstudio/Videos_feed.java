@@ -251,7 +251,7 @@ public class Videos_feed extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Shareable shareLink=new Shareable.Builder(getContext())
-                            .message("Brain Studio")
+                            .message("Come to learn and experience these 21st century skills")
                             .url(watchActualUrl+videoIds.get(position))
                             .socialChannel(Shareable.Builder.FACEBOOK)
                             .build();
@@ -263,7 +263,7 @@ public class Videos_feed extends Fragment {
                 public void onClick(View v)
                 {
                     Shareable shareLink=new Shareable.Builder(getContext())
-                           .message("Brain Studio")
+                           .message("Come to learn and experience these 21st century skills")
                            .url(watchActualUrl+videoIds.get(position))
                            .build();
                     shareLink.share();

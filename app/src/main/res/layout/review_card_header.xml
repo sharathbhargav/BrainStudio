@@ -36,6 +36,7 @@
         app:customTypeface="subHeadingBold"
         tools:ignore="MissingPrefix"
         android:textColor="@color/text2"
+        android:layout_marginLeft="10dp"
         android:textSize="15dp"
         android:gravity="bottom|start"
 
@@ -46,6 +47,7 @@
         android:id="@+id/reviewCardHeaderCentre"
         android:textColor="@color/text2"
         android:textSize="15dp"
+        android:layout_marginRight="10dp"
         app:customTypeface="subHeadingBold"
         tools:ignore="MissingPrefix"
         android:layout_alignParentBottom="true"

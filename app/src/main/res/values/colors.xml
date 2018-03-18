@@ -10,17 +10,12 @@
     <color name="colorSecondary">#09ff2f</color>
     <color name="colorSecondaryDark">#008a00</color><!--originally 00ca00-->
     <color name="colorSecondaryLight">#71ff69</color>
-    <color name="colorSecondaryLightWithAlpha">#8071ff69</color>
     <color name="colorSecondaryLightWithAlphaLighter">#2071ff69</color>
 
     <color name="text1">#ffffff</color>
     <color name="text2">#000000</color>
 
+    <color name="transparent">#00000000</color>
 
-    <color name="colorAccent">#ffffffff</color>
 
-    <array name="audioLoader">
-        <item>#ffffff</item>
-        <item>#00fff0</item>
-    </array>
 </resources>

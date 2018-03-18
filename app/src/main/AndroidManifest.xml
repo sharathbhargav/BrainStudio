@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="brainstudio.s4pl.com.brainstudio">
+    package="brainstudio.s4pl.com.brainstudio"
+    android:screenOrientation="portrait">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,8 +14,10 @@
     <application
         android:name=".application"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:configChanges="keyboardHidden|orientation|screenSize"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustResize"
@@ -29,35 +32,79 @@
                 android:resource="@xml/provider_path" />
         </provider>
 
-        <activity android:name=".Home">
+        <activity
+            android:name=".Home"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".eachBranchDetail" />
-        <activity android:name=".Enquiry" />
-        <activity android:name=".feedback" />
-        <activity android:name=".ContactUs" />
-        <activity android:name=".Reviews" />
-        <activity android:name=".AboutUs" />
-        <activity android:name=".PhotoSliderFullView" />
+        <activity
+            android:name=".eachBranchDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Enquiry"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".feedback"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ContactUs"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Reviews"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AboutUs"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PhotoSliderFullView"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Programmes"
             android:label="@string/title_activity_programmes"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Images_VideosList"
             android:label="@string/title_activity_images__videos_list"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="259b1ccf934ebb5615a949fe5e64cacb2026743c" />
 
-        <activity android:name=".Event_detail" />
-        <activity android:name=".legal"></activity>
+        <activity
+            android:name=".Event_detail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".legal"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".PhotoFullViewerCommon"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OfflineActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimaryLight" />
+
+        <activity android:name=".RegistrationActivity"></activity>
     </application>
 
 </manifest>

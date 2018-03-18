@@ -10,7 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,8 +41,13 @@ public class ContactUs extends AppCompatActivity {
     ImageView website;
     @BindView(R.id.callContact)
     ImageView call;
+    @BindView(R.id.contactUsPic)
+    ImageView contactPic;
+    @BindView(R.id.contactLocation)
+            ImageView location;
 
-
+    DatabaseReference contact;
+    String url;
     public static String FACEBOOK_URL = "https://www.facebook.com/S4plBrainStudio";
     public static String FACEBOOK_PAGE_ID = "S4plBrainStudio";
     @Override
@@ -52,6 +63,46 @@ public class ContactUs extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Contact Us");
+
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr=12.953002,77.5781816"));
+                startActivity(intent);
+            }
+        });
+
+        contact= FirebaseDatabase.getInstance().getReference("contact");
+        contact.child("img").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Glide.with(getApplicationContext())
+                        .load(dataSnapshot.getValue(String.class))
+                        .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.thumbnail).centerCrop())
+                        .centerCrop()
+                        .into(contactPic);
+                url=dataSnapshot.getValue(String.class);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        contactPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(),PhotoFullViewerCommon.class);
+                i.putExtra("type","single");
+                i.putExtra("url",url);
+                startActivity(i);
+            }
+        });
 
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +140,7 @@ public class ContactUs extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:+919164946464"));
+                intent.setData(Uri.parse("tel:+919663310280"));
                 startActivity(intent);
             }
         });

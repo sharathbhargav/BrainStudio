@@ -23,6 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
+import com.keiferstone.nonet.Configuration;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
+import com.keiferstone.nonet.NoNet;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
@@ -78,7 +82,8 @@ public class Event_detail extends AppCompatActivity {
 
 
     String registerString;
-
+    Monitor monitor;
+    boolean netLost=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +96,7 @@ public class Event_detail extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
         testLoopAdapter=new TestLoopAdapter(rollPagerView);
         mDialog = new SimpleArcDialog(this);
 
@@ -99,6 +104,36 @@ public class Event_detail extends AppCompatActivity {
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
         configuration.setText("Please wait..");
         mDialog.setConfiguration(configuration);
+
+        final Configuration config= NoNet.configure()
+                .endpoint("https://google.com")
+                .timeout(5)
+                .connectedPollFrequency(10)
+                .disconnectedPollFrequency(3)
+                .build();
+       NoNet.monitor(this)
+                .configure(config)
+                .poll()
+                .callback(new Monitor.Callback() {
+                    @Override
+                    public void onConnectionEvent(int connectionStatus) {
+
+                        if(connectionStatus== ConnectionStatus.DISCONNECTED && !netLost)
+                        {
+                            netLost=true;
+
+                            Intent offLine=new Intent(getApplicationContext(),OfflineActivity.class);
+                            startActivity(offLine);
+
+                        }
+                        if(connectionStatus==ConnectionStatus.CONNECTED)
+                            netLost=false;
+
+
+                    }
+                });
+        monitor= NoNet.check(this).start();
+
 
         Intent fromHome=getIntent();
         String path=fromHome.getStringExtra("path");
@@ -205,15 +240,27 @@ public class Event_detail extends AppCompatActivity {
         }
 
         @Override
-        public View getView(ViewGroup container, int position) {
+        public View getView(ViewGroup container,final int position) {
             ImageView view = new ImageView(container.getContext());
 
             Glide.with(getApplicationContext())
                     .load(picSlide.get(position))
-                    .placeholder(R.drawable.brainstudio)
+                    .placeholder(R.drawable.thumbnail)
 
                     .centerCrop()
                     .into(view);
+
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i=new Intent(getApplicationContext(),PhotoFullViewerCommon.class);
+                    i.putExtra("type","multi");
+                    i.putExtra("urllist",picSlide);
+                    i.putExtra("position",position);
+                    startActivity(i);
+                }
+            });
             //view.setImageResource(displayImageUrls.indexOf(position));
 
             //view.setScaleType(ImageView.ScaleType.CENTER_CROP);

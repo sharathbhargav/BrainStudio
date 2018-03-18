@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorSecondary"
+    android:layout_height="180dp"
+
     >
 
 <ImageView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:src="@drawable/brainstudio"
-    android:scaleType="centerCrop"/>
+    android:src="@drawable/logo"
+    android:scaleX="0.9"
+    android:scaleY="0.9"
+    android:paddingLeft="-50dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="-30dp"
+
+    />
 
 </LinearLayout>

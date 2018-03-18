@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -36,9 +37,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import com.keiferstone.nonet.Configuration;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
+import com.keiferstone.nonet.NoNet;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
+import com.robertsimoes.shareable.Shareable;
 
 
 import java.util.ArrayList;
@@ -47,6 +54,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
+import de.mateware.snacky.Snacky;
 import eu.davidea.flipview.FlipView;
 import io.fabric.sdk.android.Fabric;
 import proguard.annotation.Keep;
@@ -79,12 +87,24 @@ public class Home extends AppCompatActivity {
 
     DatabaseReference refParent,refBranches;
     ArrayList<homeListData> centerList=new ArrayList<>();
+ Configuration config;
+    Monitor monitor;
+   static boolean netLost=false;
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getLayoutInflater().setFactory(new CustomTypefaceFactory(
                 this, CustomTypeface.getInstance()));
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         Fabric.with(this, new Crashlytics());
@@ -92,8 +112,43 @@ public class Home extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerAdaptor=new homeRecyclerAdaptor();
+        recyclerView.getRecycledViewPool().clear();
         recyclerView.setAdapter(recyclerAdaptor);
         mDialog = new SimpleArcDialog(this);
+       config= NoNet.configure()
+                .endpoint("https://google.com")
+                .timeout(5)
+                .connectedPollFrequency(10)
+                .disconnectedPollFrequency(3)
+
+                .build();
+
+        NoNet.monitor(Home.this)
+                .configure(config)
+                .poll()
+                .callback(new Monitor.Callback() {
+                    @Override
+                    public void onConnectionEvent(int connectionStatus) {
+
+                        if(connectionStatus== ConnectionStatus.DISCONNECTED && !netLost)
+                        {
+                            netLost=true;
+
+
+                            Intent offLine=new Intent(getApplicationContext(),OfflineActivity.class);
+                            startActivity(offLine);
+
+                        }
+                        if(connectionStatus==ConnectionStatus.CONNECTED)
+                            netLost=false;
+
+
+                    }
+                });
+
+
+
+
 
         ArcConfiguration configuration = new ArcConfiguration(getApplicationContext());
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
@@ -173,6 +228,34 @@ public class Home extends AppCompatActivity {
                         Intent toLegal=new Intent(getApplicationContext(),legal.class);
                         startActivity(toLegal);
                         break;
+                    case R.id.menu_registration:
+                        drawer.closeDrawers();
+                        Intent toRegistration = new Intent(Home.this,RegistrationActivity.class);
+                        startActivity(toRegistration);
+                        break;
+                    case R.id.menu_rate:
+                        try {
+                            Intent viewIntent =
+                                    new Intent("android.intent.action.VIEW",
+                                            Uri.parse("https://play.google.com/store/apps/details?id=brainstudio.s4pl.com.brainstudio"));
+                            startActivity(viewIntent);
+                        } catch (Exception e) {
+                            Snacky.builder()
+                                    .setActivty(Home.this)
+                                    .setText("Unable to connect")
+                                    .setDuration(Snacky.LENGTH_SHORT)
+                                    .error()
+                                    .show();
+                        }
+                        break;
+                    case R.id.menu_share:
+                        Shareable shareLink=new Shareable.Builder(Home.this)
+                                .message("Brain Studio a place to identify your skills for excellence.Share with your friends and and family")
+                                .url("https://play.google.com/store/apps/details?id=brainstudio.s4pl.com.brainstudio")
+                                .build();
+                        shareLink.share();
+                        break;
+
 
                 }
                 return true;
@@ -237,6 +320,7 @@ public class Home extends AppCompatActivity {
                     list.days=noteDataSnapshot.child("days").getValue(String.class);
                     list.time=noteDataSnapshot.child("time").getValue(String.class);
                     centerList.add(list);
+                    recyclerView.getRecycledViewPool().clear();
                      recyclerAdaptor.notifyDataSetChanged();
                     if(mDialog.isShowing())
                         mDialog.dismiss();
@@ -287,7 +371,7 @@ public class Home extends AppCompatActivity {
             ImageView sat=(ImageView)back.findViewById(R.id.home_back_saturday);
 
 
-            Drawable drawable = getResources().getDrawable(R.drawable.background);
+
             final ClockImageView clocks=(ClockImageView) back.findViewById(R.id.clock1);
             final ClockImageView clocks2=(ClockImageView)back.findViewById(R.id.clock2);
 
@@ -464,6 +548,8 @@ public class Home extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+
 
 
 }

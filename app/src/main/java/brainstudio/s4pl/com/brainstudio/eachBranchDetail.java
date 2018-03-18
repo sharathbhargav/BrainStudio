@@ -27,6 +27,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
+import com.keiferstone.nonet.Configuration;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
+import com.keiferstone.nonet.NoNet;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
@@ -67,14 +71,19 @@ public class eachBranchDetail extends AppCompatActivity {
     @BindView(R.id.eachBranchCalligraphyExpandableLayout)
             ExpandableLayout calligraphyExpandableLayout;
 
+    @BindView(R.id.eachBranchAnalysisExpandableLayout)
+    ExpandableLayout analysisExpandableLayout;
+
     @BindView(R.id.eachBranchDetailLocationButton)
     ImageView location;
+    @BindView(R.id.eachBranchOtherDetailsText)
+            TextView otherDetails;
     LinearLayoutManager layoutManagerCube;
-    RecyclerView cubeRecycle,jugglingRecycle,graphoRecycle,stackRecycle,corporateRecycle,calligraphyRecycle;
-    eachBranchRecyclerAdaptor cubeRecyclerAdaptor,jugglingRecycleAdaptor,graphoRecycleAdaptor,stackRecycleAdaptor,corporateRecycleAdaptor,calligraphyRecycleAdaptor;
+    RecyclerView cubeRecycle,jugglingRecycle,graphoRecycle,stackRecycle,corporateRecycle,calligraphyRecycle,analysisRecycle;
+    eachBranchRecyclerAdaptor cubeRecyclerAdaptor,jugglingRecycleAdaptor,graphoRecycleAdaptor,stackRecycleAdaptor,corporateRecycleAdaptor,calligraphyRecycleAdaptor,analysisRecycleAdaptor;
 
-    init cubeInit,jugglingInit,graphoInit,stackInit,corporateInit,calligraphyInit;
- ArrayList<EachBranchCardCommonClass> cubeList,jugglingList,scientificlist,stackList,corporateList,calligraphyList;
+    init cubeInit,jugglingInit,graphoInit,stackInit,corporateInit,calligraphyInit,analysisInit;
+ ArrayList<EachBranchCardCommonClass> cubeList,jugglingList,scientificlist,stackList,corporateList,calligraphyList,analysisList;
 
 ArrayList<String> picSlide=new ArrayList<>();
     String centre="Uttarahalli",locationString="0,0";
@@ -84,6 +93,8 @@ ArrayList<String> picSlide=new ArrayList<>();
 
     SimpleArcDialog mDialog;
 
+    Monitor monitor;
+    boolean netLost=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getLayoutInflater().setFactory(new CustomTypefaceFactory(
@@ -93,7 +104,7 @@ ArrayList<String> picSlide=new ArrayList<>();
         ButterKnife.bind(this);
         Fabric.with(this, new Crashlytics());
         collapsingToolbarLayout=(CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -113,10 +124,44 @@ ArrayList<String> picSlide=new ArrayList<>();
         mDialog.setCancelable(false);
         mDialog.show();
 
+        final Configuration config= NoNet.configure()
+                .endpoint("https://google.com")
+                .timeout(5)
+                .connectedPollFrequency(10)
+                .disconnectedPollFrequency(3)
+                .build();
+       NoNet.monitor(this)
+                .configure(config)
+                .poll()
+                .callback(new Monitor.Callback() {
+                    @Override
+                    public void onConnectionEvent(int connectionStatus) {
+
+                        if(connectionStatus== ConnectionStatus.DISCONNECTED && !netLost)
+                        {
+                            netLost=true;
+
+                            Intent offLine=new Intent(getApplicationContext(),OfflineActivity.class);
+                            startActivity(offLine);
+
+                        }
+                        if(connectionStatus==ConnectionStatus.CONNECTED)
+                            netLost=false;
 
 
+                    }
+                });
+        monitor= NoNet.check(this).start();
 
 
+String det="* No Monthly fees.\n" +
+        "* Only course  fees.\n" +
+        "* The fees is until the child learns , the taken course.\n" +
+        "* Weekly two training classes ,minimum required.\n" +
+        "* In Rubiks cube a combination of two different cubes   attracts a discount of 1000/-.\n" +
+        "* Materials are provided for all the Courses.[Included]\n" +
+        "* Competitions will be done on a regular basis.\n*Not applicable in summer camps";
+        otherDetails.setText(det);
 
 
         Log.v("home","path received=  "+path);
@@ -207,6 +252,7 @@ ArrayList<String> picSlide=new ArrayList<>();
                     stackExpandableLayout.hide();
                     corporateExpandableLayout.hide();
                     calligraphyExpandableLayout.hide();
+                    analysisExpandableLayout.hide();
                 }
 
             }
@@ -227,6 +273,7 @@ ArrayList<String> picSlide=new ArrayList<>();
                     stackExpandableLayout.hide();
                     corporateExpandableLayout.hide();
                     calligraphyExpandableLayout.hide();
+                    analysisExpandableLayout.hide();
                 }
             }
         });
@@ -246,6 +293,7 @@ ArrayList<String> picSlide=new ArrayList<>();
                     stackExpandableLayout.hide();
                     corporateExpandableLayout.hide();
                     calligraphyExpandableLayout.hide();
+                    analysisExpandableLayout.hide();
                 }
             }
         });
@@ -265,6 +313,7 @@ ArrayList<String> picSlide=new ArrayList<>();
                     stackExpandableLayout.show();
                     corporateExpandableLayout.hide();
                     calligraphyExpandableLayout.hide();
+                    analysisExpandableLayout.hide();
                 }
             }
         });
@@ -284,6 +333,7 @@ ArrayList<String> picSlide=new ArrayList<>();
                     stackExpandableLayout.hide();
                     corporateExpandableLayout.show();
                     calligraphyExpandableLayout.hide();
+                    analysisExpandableLayout.hide();
                 }
             }
         });
@@ -303,6 +353,26 @@ ArrayList<String> picSlide=new ArrayList<>();
                     stackExpandableLayout.hide();
                     corporateExpandableLayout.hide();
                     calligraphyExpandableLayout.show();
+                    analysisExpandableLayout.hide();
+                }
+            }
+        });
+
+
+        analysisExpandableLayout.getHeaderRelativeLayout().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(analysisExpandableLayout.isOpened())
+                    analysisExpandableLayout.hide();
+                else
+                {
+                    cubeExpandableLayout.hide();
+                    jugglingExpandableLayout.hide();
+                    graphoExpandableLayout.hide();
+                    stackExpandableLayout.hide();
+                    corporateExpandableLayout.hide();
+                    calligraphyExpandableLayout.hide();
+                    analysisExpandableLayout.show();
                 }
             }
         });
@@ -315,66 +385,97 @@ ArrayList<String> picSlide=new ArrayList<>();
     {
 
         cubeList=new ArrayList<>();
-        extractDetails("cube",cubeList);
-        RelativeLayout cubeBody= cubeExpandableLayout.getContentRelativeLayout();
-        cubeRecycle =(RecyclerView) cubeBody.findViewById(R.id.eachBranchCubeRecyclerView) ;
-        TextView cubeText=(TextView) cubeExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
-        cubeText.setText("Rubik's Cube");
-        cubeInit=new init(cubeRecycle,layoutManagerCube,cubeRecyclerAdaptor,cubeList);
+        cubeList=extractDetails("cube",cubeList);
+        Log.v("water","cube"+cubeList.size());
+
+            RelativeLayout cubeBody = cubeExpandableLayout.getContentRelativeLayout();
+            cubeRecycle = (RecyclerView) cubeBody.findViewById(R.id.eachBranchCubeRecyclerView);
+            TextView cubeText = (TextView) cubeExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
+
+            cubeText.setText("Rubik's Cube");
+            cubeInit = new init(cubeRecycle, layoutManagerCube, cubeRecyclerAdaptor, cubeList);
+
+
 
 
         jugglingList=new ArrayList<>();
         extractDetails("juggling",jugglingList);
-        RelativeLayout jugglingBody=jugglingExpandableLayout.getContentRelativeLayout();
-        jugglingRecycle=(RecyclerView) jugglingBody.findViewById(R.id.eachBranchCubeRecyclerView);
-        TextView jugglingText=(TextView) jugglingExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
-        jugglingText.setText("Juggling");
-        jugglingInit=new init(jugglingRecycle,layoutManagerCube,jugglingRecycleAdaptor,jugglingList);
+
+            RelativeLayout jugglingBody = jugglingExpandableLayout.getContentRelativeLayout();
+            jugglingRecycle = (RecyclerView) jugglingBody.findViewById(R.id.eachBranchCubeRecyclerView);
+            TextView jugglingText = (TextView) jugglingExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
+            jugglingText.setText("Juggling");
+            jugglingInit = new init(jugglingRecycle, layoutManagerCube, jugglingRecycleAdaptor, jugglingList);
 
 
         scientificlist=new ArrayList<>();
         extractDetails("scientific",scientificlist);
-        RelativeLayout graphoBody= graphoExpandableLayout.getContentRelativeLayout();
-        graphoRecycle =(RecyclerView) graphoBody.findViewById(R.id.eachBranchCubeRecyclerView) ;
-        TextView graphoText=(TextView) graphoExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
-        graphoText.setText("Scientific Handwriting");
-        graphoInit=new init(graphoRecycle,layoutManagerCube,graphoRecycleAdaptor,scientificlist);
+
+            RelativeLayout graphoBody = graphoExpandableLayout.getContentRelativeLayout();
+            graphoRecycle = (RecyclerView) graphoBody.findViewById(R.id.eachBranchCubeRecyclerView);
+            TextView graphoText = (TextView) graphoExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
+            graphoText.setText("Scientific Handwriting");
+            graphoInit = new init(graphoRecycle, layoutManagerCube, graphoRecycleAdaptor, scientificlist);
+
+
 
 
         stackList=new ArrayList<>();
         extractDetails("stack",stackList);
-        RelativeLayout stackBody= stackExpandableLayout.getContentRelativeLayout();
-        stackRecycle =(RecyclerView) stackBody.findViewById(R.id.eachBranchCubeRecyclerView) ;
-        TextView stackText=(TextView) stackExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
-        stackText.setText("Speed Stacking");
-        stackInit=new init(stackRecycle,layoutManagerCube,stackRecycleAdaptor,stackList);
+
+            RelativeLayout stackBody = stackExpandableLayout.getContentRelativeLayout();
+            stackRecycle = (RecyclerView) stackBody.findViewById(R.id.eachBranchCubeRecyclerView);
+            TextView stackText = (TextView) stackExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
+            stackText.setText("Speed Stacking");
+            stackInit = new init(stackRecycle, layoutManagerCube, stackRecycleAdaptor, stackList);
+
+
 
 
         corporateList=new ArrayList<>();
         extractDetails("corporate",corporateList);
-        RelativeLayout corporateBody= corporateExpandableLayout.getContentRelativeLayout();
-        corporateRecycle =(RecyclerView) corporateBody.findViewById(R.id.eachBranchCubeRecyclerView);
-        TextView corporateText=(TextView) corporateExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
-        corporateText.setText("Corporate Training");
-        corporateInit=new init(corporateRecycle,layoutManagerCube,corporateRecycleAdaptor,corporateList);
+
+            RelativeLayout corporateBody = corporateExpandableLayout.getContentRelativeLayout();
+            corporateRecycle = (RecyclerView) corporateBody.findViewById(R.id.eachBranchCubeRecyclerView);
+            TextView corporateText = (TextView) corporateExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
+            corporateText.setText("Corporate Training");
+            corporateInit = new init(corporateRecycle, layoutManagerCube, corporateRecycleAdaptor, corporateList);
+
+
 
 
         calligraphyList=new ArrayList<>();
         extractDetails("calligraphy",calligraphyList);
-        RelativeLayout calligraphyBody=calligraphyExpandableLayout.getContentRelativeLayout();
-        calligraphyRecycle=(RecyclerView)calligraphyBody.findViewById(R.id.eachBranchCubeRecyclerView);
-        TextView calligraphyText=(TextView) calligraphyExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
-        calligraphyText.setText("Calligraphy");
-        calligraphyInit=new init(calligraphyRecycle,layoutManagerCube,calligraphyRecycleAdaptor,calligraphyList);
+
+            RelativeLayout calligraphyBody = calligraphyExpandableLayout.getContentRelativeLayout();
+            calligraphyRecycle = (RecyclerView) calligraphyBody.findViewById(R.id.eachBranchCubeRecyclerView);
+            TextView calligraphyText = (TextView) calligraphyExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
+            calligraphyText.setText("Calligraphy");
+            calligraphyInit = new init(calligraphyRecycle, layoutManagerCube, calligraphyRecycleAdaptor, calligraphyList);
+
+
+
+        analysisList=new ArrayList<>();
+        extractDetails("analysis",analysisList);
+
+            RelativeLayout analysisBody = analysisExpandableLayout.getContentRelativeLayout();
+            analysisRecycle = (RecyclerView) analysisBody.findViewById(R.id.eachBranchCubeRecyclerView);
+            TextView analysisText = (TextView) analysisExpandableLayout.getHeaderRelativeLayout().findViewById(R.id.eachBranchHeaderText);
+            analysisText.setText("Handwriting Analysis");
+            analysisInit = new init(analysisRecycle, layoutManagerCube, analysisRecycleAdaptor, analysisList);
+
     }
 
 
-    void extractDetails(final String type, final ArrayList<EachBranchCardCommonClass> list)
+    boolean dataRetrievalDone=false;
+    ArrayList<EachBranchCardCommonClass> extractDetails(final String type, final ArrayList<EachBranchCardCommonClass> list)
     {
         DatabaseReference each=prog.child(type);
+
         each.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                dataRetrievalDone=false;
                 for(DataSnapshot d:dataSnapshot.getChildren())
                 {
                     EachBranchCardCommonClass temp=new EachBranchCardCommonClass();
@@ -382,17 +483,24 @@ ArrayList<String> picSlide=new ArrayList<>();
                     temp.img=d.child("img").getValue(String.class);
                     temp.cost=d.child("cost").getValue(String.class);
                     temp.head=d.child("name").getValue(String.class);
+                    Log.v("fire","cost="+temp.cost);
                     list.add(temp);
                     if(mDialog.isShowing())
                         mDialog.dismiss();
                 }
+                dataRetrievalDone=true;
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
         });
+
+        Log.v("fire","list len"+list.size());
+        return list;
     }
 
 
@@ -417,15 +525,25 @@ ArrayList<String> picSlide=new ArrayList<>();
         }
 
         @Override
-        public View getView(ViewGroup container, int position) {
+        public View getView(ViewGroup container, final int position) {
             ImageView view = new ImageView(container.getContext());
 
             Glide.with(getApplicationContext())
                     .load(picSlide.get(position))
-                    .placeholder(R.drawable.brainstudio)
+                    .placeholder(R.drawable.thumbnail)
 
                     .centerCrop()
                     .into(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i=new Intent(getApplicationContext(),PhotoFullViewerCommon.class);
+                    i.putExtra("type","multi");
+                    i.putExtra("urllist",picSlide);
+                    i.putExtra("position",position);
+                    startActivity(i);
+                }
+            });
             //view.setImageResource(displayImageUrls.indexOf(position));
 
             //view.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -468,7 +586,7 @@ ArrayList<String> picSlide=new ArrayList<>();
             holder.heading.setText(eachList.get(position).head);
             Glide.with(getApplicationContext())
                     .load(eachList.get(position).img)
-                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.thumbnail))
+                    .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.thumbnail).centerCrop())
                     .centerCrop()
                     .into(holder.img);
             holder.day.setText(dayString);

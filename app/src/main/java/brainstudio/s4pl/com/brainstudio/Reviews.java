@@ -1,6 +1,7 @@
 package brainstudio.s4pl.com.brainstudio;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -32,6 +33,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.keiferstone.nonet.Configuration;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
+import com.keiferstone.nonet.NoNet;
 import com.leo.simplearcloader.SimpleArcLoader;
 
 import java.util.ArrayList;
@@ -62,6 +67,8 @@ public class Reviews extends AppCompatActivity {
     ArrayList<ReviewData> reviewDatas=new ArrayList<>();
     NiftyDialogBuilder dialogBuilder;
     ViewGroup viewGroup;
+    Monitor monitor;
+    boolean netLost=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getLayoutInflater().setFactory(new CustomTypefaceFactory(
@@ -80,6 +87,36 @@ public class Reviews extends AppCompatActivity {
 
         dialogBuilder=NiftyDialogBuilder.getInstance(this);
 
+        final Configuration config= NoNet.configure()
+                .endpoint("https://google.com")
+                .timeout(5)
+                .connectedPollFrequency(10)
+                .disconnectedPollFrequency(3)
+                .build();
+       NoNet.monitor(this)
+                .configure(config)
+                .poll()
+                .callback(new Monitor.Callback() {
+                    @Override
+                    public void onConnectionEvent(int connectionStatus) {
+
+                        if(connectionStatus== ConnectionStatus.DISCONNECTED && !netLost)
+                        {
+                            netLost=true;
+
+                            Intent offLine=new Intent(getApplicationContext(),OfflineActivity.class);
+                            startActivity(offLine);
+
+                        }
+                        if(connectionStatus==ConnectionStatus.CONNECTED)
+                            netLost=false;
+
+
+                    }
+                });
+        monitor= NoNet.check(this).start();
+
+
         dialogBuilder
                 .withTitle("Audio Review")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
@@ -92,7 +129,7 @@ public class Reviews extends AppCompatActivity {
                                                   //def gone
                 .isCancelableOnTouchOutside(false)
                 .isCancelable(false)                                                 //def    | isCancelable(true)
-                .setCustomView(R.layout.audio_dialog,getBaseContext());       // .setCustomView(View or ResId,context
+               .setCustomView(R.layout.audio_dialog,Reviews.this);       // .setCustomView(View or ResId,context
 
         reviewRecycler.setLayoutManager(layoutManager);
         adaptor=new reviewAdaptor();

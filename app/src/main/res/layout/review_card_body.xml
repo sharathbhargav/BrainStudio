@@ -13,6 +13,7 @@
         android:background="@drawable/edit_text_border"
         app:customTypeface="subHeadingBold"
         tools:ignore="MissingPrefix"
+        android:textColor="@color/text2"
         android:layout_margin="5dp"
         />
 

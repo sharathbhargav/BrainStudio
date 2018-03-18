@@ -1,6 +1,7 @@
 package layout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,13 +22,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.keiferstone.nonet.Configuration;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
+import com.keiferstone.nonet.NoNet;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import brainstudio.s4pl.com.brainstudio.EachProgramCardData;
+import brainstudio.s4pl.com.brainstudio.OfflineActivity;
+import brainstudio.s4pl.com.brainstudio.PhotoFullViewerCommon;
+import brainstudio.s4pl.com.brainstudio.Programmes;
 import brainstudio.s4pl.com.brainstudio.programmeData;
 import brainstudio.s4pl.com.brainstudio.R;
 import butterknife.BindView;
@@ -58,8 +67,7 @@ public class CommonFragment extends Fragment {
     private String mParam1;
 
     private OnFragmentInteractionListener mListener;
-    @BindView(R.id.eachProgramGridRecycler)
-    RecyclerView eachProgramGridRecycler;
+
     @BindView(R.id.eachProgramBenifits)
     TextView benifits;
     @BindView(R.id.eachProgramInfo)
@@ -67,8 +75,6 @@ public class CommonFragment extends Fragment {
     @BindView(R.id.eachProgramHeading)
     TextView heading;
 
-    eachProgramGridRecyclerAdaptor recyclerAdaptor;
-    GridLayoutManager gridLayoutManager;
 
     DatabaseReference level1;
     DataSnapshot benifitsRef,infoRef,imgRef;
@@ -77,6 +83,7 @@ public class CommonFragment extends Fragment {
 
     programmeData data=new programmeData();
 
+    boolean netLost=false;
     SimpleArcDialog mDialog;
     public CommonFragment() {
         // Required empty public constructor
@@ -118,7 +125,7 @@ public class CommonFragment extends Fragment {
 
 
 
-        Log.v("fragment","in onCreate");
+        Log.v("common","in onCreate  common fragment");
     }
 
     @Override
@@ -127,11 +134,7 @@ public class CommonFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_common, container, false);
         ButterKnife.bind(this,v);
         list.clear();
-        gridLayoutManager=new GridLayoutManager(getContext(),2);
-        eachProgramGridRecycler.setLayoutManager(gridLayoutManager);
-        recyclerAdaptor=new eachProgramGridRecyclerAdaptor();
-        eachProgramGridRecycler.setAdapter(recyclerAdaptor);
-        Log.v("fragment","benifits:::"+data.getBenifits(mParam1));
+
         heading.requestFocus();
 
         level1= FirebaseDatabase.getInstance().getReference(mParam1);
@@ -156,7 +159,7 @@ public class CommonFragment extends Fragment {
                         t.link = d.child("link").getValue(String.class);
                         t.name = d.child("name").getValue(String.class);
                         list.add(t);
-                        recyclerAdaptor.notifyDataSetChanged();
+
                         mDialog.dismiss();
                     }
 
@@ -187,7 +190,7 @@ public class CommonFragment extends Fragment {
                         t.link = d.child("link").getValue(String.class);
                         t.name = d.child("name").getValue(String.class);
                         list.add(t);
-                        recyclerAdaptor.notifyDataSetChanged();
+
                         mDialog.dismiss();
                     }
                 }
@@ -204,32 +207,13 @@ public class CommonFragment extends Fragment {
 
 
 
-        Log.v("fragment","in onCreateView");
+        Log.v("common","in onCreateView commonfragment");
 
 
 
 
 
 
-
-
-
-        eachProgramGridRecycler.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return true;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
 
 
 
@@ -277,40 +261,6 @@ public class CommonFragment extends Fragment {
     }
 
 
-    public class eachProgramGridRecyclerAdaptor extends RecyclerView.Adapter<eachProgramGridRecyclerAdaptor.gridCardHolder>
-    {
-        @Override
-        public gridCardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.each_program_grid_recycler_card,parent,false);
-            return new gridCardHolder(itemView);
-        }
 
-        @Override
-        public void onBindViewHolder(gridCardHolder holder, int position) {
-
-            Glide.with(getContext())
-                    .load(list.get(position).link)
-                    .thumbnail(Glide.with(getContext()).load(R.drawable.thumbnail))
-                    .centerCrop()
-                    .into(holder.gridCardImage);
-            holder.gridCardText.setText(list.get(position).name);
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        public class gridCardHolder extends RecyclerView.ViewHolder
-        {
-            ImageView gridCardImage;
-            TextView gridCardText;
-            public gridCardHolder(View itemView) {
-                super(itemView);
-                gridCardImage=(ImageView)itemView.findViewById(R.id.eachProgramGridRecyclerCardImage);
-                gridCardText=(TextView)itemView.findViewById(R.id.eachProgramGridRecyclerCardText);
-            }
-        }
-    }
 
 }

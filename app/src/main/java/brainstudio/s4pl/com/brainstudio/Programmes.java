@@ -1,5 +1,6 @@
 package brainstudio.s4pl.com.brainstudio;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+
 
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
@@ -53,13 +56,14 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
 
     Toolbar toolbar;
 
-    private int[] tabIcons = {
+
+   int[] tabIcons = {
             R.drawable.cube,
-            R.drawable.juggle,
-            R.drawable.scientifichand,
-            R.drawable.speedstack,
+            R.drawable.juggling,
+            R.drawable.hand,
+            R.drawable.stack,
             R.drawable.calligraphy,
-            R.drawable.corporatetraining
+            R.drawable.analysis
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +79,19 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+
+
+
+        Log.v("common","in programmes.java on create");
+
+
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.programmes_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.programmes_tabs);
         tabLayout.setupWithViewPager(mViewPager);
         for(int i=0;i<=5;i++)
         {
@@ -129,6 +140,7 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            Log.v("common","oncreateview programme.java");
             View rootView = inflater.inflate(R.layout.fragment_programmes, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
@@ -167,7 +179,7 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
                     CommonFragment tab5 = CommonFragment.newInstance("calligraphy");
                     return tab5;
                 case 5:
-                    CommonFragment tab6 =CommonFragment.newInstance("corporate");
+                    CommonFragment tab6=CommonFragment.newInstance("analysis");
                     return tab6;
                 default:
                     return null;
@@ -195,7 +207,7 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
                 case 4:
                     return "Calligraphy";
                 case 5:
-                    return "Corporate Training";
+                    return "Handwriting Analysis";
             }
             return null;
         }
@@ -206,4 +218,6 @@ public class Programmes extends AppCompatActivity implements CommonFragment.OnFr
         onBackPressed();
         return true;
     }
+
+
 }

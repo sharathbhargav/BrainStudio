@@ -1,5 +1,6 @@
 package brainstudio.s4pl.com.brainstudio;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,8 +21,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+
+
 import cat.ppicas.customtypeface.CustomTypeface;
 import cat.ppicas.customtypeface.CustomTypefaceFactory;
+import de.mateware.snacky.Snacky;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMembers;
 
@@ -45,7 +49,8 @@ public class Images_VideosList extends AppCompatActivity implements Videos_feed.
     TabLayout tabLayout;
     private ViewPager mViewPager;
 
-
+    boolean netLost=false;
+    Snacky.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getLayoutInflater().setFactory(new CustomTypefaceFactory(
@@ -53,7 +58,7 @@ public class Images_VideosList extends AppCompatActivity implements Videos_feed.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images__videos_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.news_toolbar);
         toolbar.setTitle("News Feed");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -63,12 +68,52 @@ public class Images_VideosList extends AppCompatActivity implements Videos_feed.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.news_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.news_tabs);
         tabLayout.setupWithViewPager(mViewPager);
+       // NoNet.destroy();
+       // config= NoNet.configure()
+       //         .endpoint("https://google.com")
+       //         .timeout(5)
+       //         .connectedPollFrequency(10)
+       //         .disconnectedPollFrequency(3)
+//
+       //         .build();
 
+
+
+       //NoNet.monitor(Images_VideosList.this)
+       //        .configure(config)
+       //        .poll()
+       //        .callback(new Monitor.Callback() {
+       //            @Override
+       //            public void onConnectionEvent(int connectionStatus) {
+
+       //                if(connectionStatus== ConnectionStatus.DISCONNECTED )
+       //                {
+       //                    netLost=true;
+
+       //                  builder= Snacky.builder();
+       //                            builder.setActivty(Images_VideosList.this)
+       //                            .setText("Internet Lost.Please check Network connection.")
+       //                            .setDuration(Snacky.LENGTH_LONG)
+       //                            .error()
+       //                            .show();
+
+
+
+
+       //                }
+       //                if(connectionStatus==ConnectionStatus.CONNECTED)
+       //                    netLost=false;
+       //                if(builder!=null)
+       //                    builder.setDuration(3);
+
+
+       //            }
+       //        });
 
 
 
@@ -85,9 +130,9 @@ public class Images_VideosList extends AppCompatActivity implements Videos_feed.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+    //    if (id == R.id.action_settings) {
+      //      return true;
+       // }
 
         return super.onOptionsItemSelected(item);
     }

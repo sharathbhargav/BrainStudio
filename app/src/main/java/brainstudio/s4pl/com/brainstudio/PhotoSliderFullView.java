@@ -27,6 +27,10 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.keiferstone.nonet.Configuration;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
+import com.keiferstone.nonet.NoNet;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.leo.simplearcloader.SimpleArcLoader;
@@ -75,6 +79,8 @@ public class PhotoSliderFullView extends AppCompatActivity {
     PermissionsHelper helper;
     boolean result = false;
 
+    Monitor monitor;
+    boolean netLost=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,34 @@ public class PhotoSliderFullView extends AppCompatActivity {
         configuration.setLoaderStyle(SimpleArcLoader.STYLE.COMPLETE_ARC);
         configuration.setText("Please Wait.....");
         mDialog.setConfiguration(configuration);
+        final Configuration config= NoNet.configure()
+                .endpoint("https://google.com")
+                .timeout(5)
+                .connectedPollFrequency(10)
+                .disconnectedPollFrequency(3)
+                .build();
+        NoNet.monitor(this)
+                .configure(config)
+                .poll()
+                .callback(new Monitor.Callback() {
+                    @Override
+                    public void onConnectionEvent(int connectionStatus) {
+
+                        if(connectionStatus== ConnectionStatus.DISCONNECTED && !netLost)
+                        {
+                            netLost=true;
+
+                            Intent offLine=new Intent(getApplicationContext(),OfflineActivity.class);
+                            startActivity(offLine);
+
+                        }
+                        if(connectionStatus==ConnectionStatus.CONNECTED)
+                            netLost=false;
+
+
+                    }
+                });
+        monitor= NoNet.check(this).start();
 
 
 
@@ -118,7 +152,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
 
         }
         Log.v("test123", sharePhotoRef.getName() + "\n" + sharePhotoRef.getBucket().toString());
-        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
+        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName().toLowerCase());
         if (localFile.exists()) {
             Uri uri = Uri.fromFile(localFile);
             Shareable imageShare = new Shareable.Builder(PhotoSliderFullView.this)
@@ -156,8 +190,8 @@ public class PhotoSliderFullView extends AppCompatActivity {
                 return;
 
         }
-        Log.v("test123", sharePhotoRef.getName() + "\n" + sharePhotoRef.getBucket().toString());
-        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
+        Log.v("test123", sharePhotoRef.getName() + "\n" + sharePhotoRef.getBucket());
+        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName().toLowerCase());
         if (localFile.exists()) {
             Uri uri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", (localFile));
             Intent shareIntent = new Intent();
@@ -217,7 +251,7 @@ public class PhotoSliderFullView extends AppCompatActivity {
 
         }
         Log.v("test123", sharePhotoRef.getName() + "\n" + sharePhotoRef.getBucket().toString());
-        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName());
+        final File localFile = new File(mediaStorageDir.getPath() + File.separator + sharePhotoRef.getName().toLowerCase());
         if (localFile.exists()) {
             Snacky.builder()
                     .setActivty(PhotoSliderFullView.this)

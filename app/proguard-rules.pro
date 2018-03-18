@@ -20,3 +20,7 @@
 
 -keep class com.sun.mail.** { *; }
 -dontwarn com.sun.mail.**
+-dontwarn io.reactivex.**
+-dontwarn okio.**
+-keep class org.apache.** { *; }
+-dontwarn org.apache.**

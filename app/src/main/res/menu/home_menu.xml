@@ -49,6 +49,11 @@
         android:title="Enquiry"
         android:icon="@drawable/ic_help_white_36dp"/>
 
+    <item
+        android:id="@+id/menu_registration"
+        android:title="Registration"
+        android:icon="@drawable/ic_help_white_36dp"/>
+
     <group
         android:enabled="true">
     <item android:id="@+id/menu_legal"
@@ -57,6 +62,17 @@
         />
 
     </group>
+    <item
+        android:id="@+id/menu_rate"
+        android:title="Rate our app"
+        android:icon="@drawable/ic_star_rate_white_18dp"
+        />
+    <item
+        android:id="@+id/menu_share"
+        android:title="Share app"
+        android:icon="@drawable/fileshareothers"/>
+
+
 
 
 

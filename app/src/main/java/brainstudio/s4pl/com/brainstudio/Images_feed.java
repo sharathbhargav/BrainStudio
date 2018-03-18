@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.robertsimoes.shareable.Shareable;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -103,6 +103,10 @@ public class Images_feed extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
+
     }
     @BindView(R.id.imageListRecycler)
     RecyclerView imageList;
