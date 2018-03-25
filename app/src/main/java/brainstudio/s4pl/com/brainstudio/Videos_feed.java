@@ -3,6 +3,7 @@ package brainstudio.s4pl.com.brainstudio;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -120,9 +121,11 @@ public class Videos_feed extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot noteDataSnapShot:dataSnapshot.getChildren()) {
                     videoIds.add( noteDataSnapShot.getValue(String.class));
-                    extractVideoHeadings(noteDataSnapShot.getValue(String.class),adapter);
-                    mDialog.dismiss();
+
+
                 }
+                extractVideoHeadings(adapter);
+
             }
 
             @Override
@@ -131,25 +134,12 @@ public class Videos_feed extends Fragment {
             }
         });
     }
-    void extractVideoHeadings(String videoId,thumbNailAdapter adapter)
+    void extractVideoHeadings(thumbNailAdapter adapter)
     {
-        String youTubeUrl=watchActualUrl+videoId;
-        try {
-            if (youTubeUrl != null) {
-                URL embededURL = new URL("http://www.youtube.com/oembed?url=" +
-                        youTubeUrl + "&format=json"
-                );
-               // Log.v("test123",embededURL.toString());
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                StrictMode.setThreadPolicy(policy);
-               // Log.v("test123",new JSONObject(IOUtils.toString(embededURL)).getString("title"));
-                videoHeadingsList.add( new JSONObject(IOUtils.toString(embededURL)).getString("title"));
-                adapter.notifyDataSetChanged();
-            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AsyncTaskRunner runner = new AsyncTaskRunner();
+        runner.execute(adapter);
+
 
 
     }
@@ -208,6 +198,8 @@ public class Videos_feed extends Fragment {
         @Override
         public void onBindViewHolder(final thumbNailAdapter.thumbnailHolder holder, final int position)
         {
+            if(position>1 || videoIds.size()<=5)
+                mDialog.dismiss();
             Glide.with(Videos_feed.this)
                     .load(urlPart1+videoIds.get(position)+urlPart2)
                     .thumbnail(Glide.with(getContext()).load(R.drawable.thumbnail).centerCrop())
@@ -280,4 +272,67 @@ public class Videos_feed extends Fragment {
 
 
     }
+
+
+
+    private class AsyncTaskRunner extends AsyncTask<thumbNailAdapter, String, thumbNailAdapter> {
+
+        private String resp;
+
+
+        @Override
+        protected thumbNailAdapter doInBackground(thumbNailAdapter... adapter) {
+            int count=0;
+            for(String videoId:videoIds) {
+                String youTubeUrl = watchActualUrl + videoId;
+                count++;
+                try {
+                    if (youTubeUrl != null) {
+                        URL embededURL = new URL("http://www.youtube.com/oembed?url=" +
+                                youTubeUrl + "&format=json"
+                        );
+                        // Log.v("test123",embededURL.toString());
+                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                        StrictMode.setThreadPolicy(policy);
+                        // Log.v("test123",new JSONObject(IOUtils.toString(embededURL)).getString("title"));
+                        videoHeadingsList.add(new JSONObject(IOUtils.toString(embededURL)).getString("title"));
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+            }
+            return adapter[0];
+        }
+
+
+        @Override
+        protected void onPostExecute(thumbNailAdapter result) {
+            // execution of result of Long time consuming operation
+            result.notifyDataSetChanged();
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String... text) {
+
+
+        }
+    }
+
 }
+
+
+
+

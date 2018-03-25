@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -445,14 +446,17 @@ public class Home extends AppCompatActivity {
                     sat.setVisibility(View.GONE);
                 }
 
-
+            if(centerList.get(position).name.length()>13)
+                name.setTextSize(20);
             name.setText(centerList.get(position).name);
             phone.setText(centerList.get(position).phno);
             address.setText(centerList.get(position).address);
             String temp=centerList.get(position).days;
             String[] d=temp.split(",");
+
             for(int i=0;i<d.length;i++)
             {
+                Log.v("fire","inside for"+d[i]+"  centre"+centerList.get(position).name);
                 switch (d[i])
                 {
                     case "sun":
@@ -485,6 +489,7 @@ public class Home extends AppCompatActivity {
                         break;
 
                 }
+
             }
 
             Glide.with(getApplicationContext())

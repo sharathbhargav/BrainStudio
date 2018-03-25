@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
+
     tools:context="brainstudio.s4pl.com.brainstudio.RegistrationActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
@@ -24,7 +26,11 @@
     </android.support.design.widget.AppBarLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/registration_appbar"
+        android:id="@+id/registrationScroll"
+        android:layout_marginBottom="50dp"
+        android:fillViewport="true"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,7 +44,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:hint="Wowian Name"
+                    android:hint="Child Name"
 
                     >
 
@@ -46,7 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
 
-                        android:id="@+id/RegistrationNameEdit"
+                        android:id="@+id/registrationNameEdit"
 
                         android:textSize="@dimen/edit_text_size"
                         android:theme="@style/MyEditText"
@@ -78,11 +84,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
 
-                        android:id="@+id/RegistrationStandardEdit"
+                        android:id="@+id/registrationStandardEdit"
 
                         android:textSize="@dimen/edit_text_size"
                         android:theme="@style/MyEditText"
-                        android:inputType="textCapWords"
+                        android:inputType="number"
                         />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -102,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
 
-                    android:id="@+id/RegistrationSchoolEdit"
+                    android:id="@+id/registrationSchoolEdit"
 
                     android:textSize="@dimen/edit_text_size"
                     android:theme="@style/MyEditText"
@@ -120,7 +126,9 @@
                 android:id="@+id/registrationDateSelectButton"
                 android:text="Set Date of Birth"
                 android:layout_weight="40"
-                android:textColor="#000000"/>
+                android:background="@drawable/submit_button_background"
+                android:textColor="@color/text1"
+                />
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -274,7 +282,7 @@
                 android:layout_marginEnd="5dp"
                 app:hintTextAppearance="@style/MyHintText"
 
-                android:hint="Mother's Name"
+                android:hint="Residential Phone number"
                 >
                 <EditText
                     android:layout_width="match_parent"
@@ -287,6 +295,28 @@
 
                     android:inputType="phone"/>
             </android.support.design.widget.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:layout_marginStart="5dp"
+                    android:text="Area"/>
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/registrationSpinnerCentre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:ms_dropdown_max_height="150dp"
+                    app:ms_text_color="@color/colorPrimary"
+                    android:textSize="15dp"
+                    app:ms_arrow_tint="@color/colorSecondaryDark"
+                    android:background="@drawable/edit_text_border"/>
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -310,25 +340,6 @@
 
                     android:inputType="textEmailAddress"/>
             </android.support.design.widget.TextInputLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:layout_marginStart="5dp"
-                    android:text="Area"/>
-                <com.jaredrummler.materialspinner.MaterialSpinner
-                    android:id="@+id/registrationSpinnerCentre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:ms_text_color="@color/colorPrimary"
-                    android:textSize="15dp"
-                    app:ms_arrow_tint="@color/colorSecondaryDark"
-                    android:background="@drawable/edit_text_border"/>
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -342,9 +353,22 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp" />
 
-            </LinearLayout>
+
+
+
+        </LinearLayout>
+
 
 
 
     </ScrollView>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/registrationAccept"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/submit_button_background"
+        android:textColor="@color/text1"
+        android:text="Register" />
+</RelativeLayout>

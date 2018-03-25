@@ -25,11 +25,12 @@
     android:layout_height="wrap_content"
     android:layout_weight="5"
     android:orientation="horizontal"
+    android:layout_marginBottom="3dp"
     android:weightSum="100">
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="50"
+            android:layout_weight="80"
             android:text=""
             app:customTypeface="headingBold"
             tools:ignore="MissingPrefix"
@@ -37,7 +38,7 @@
 
             android:gravity="center_horizontal|center_vertical"
             android:textSize="30dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/flip_front_text_background"
 
             android:id="@+id/home_card_front_name"/>
 </LinearLayout>
@@ -47,12 +48,14 @@
         android:layout_weight="5"
         android:orientation="horizontal"
         android:gravity="end"
+        android:layout_marginTop="2dp"
         android:weightSum="100">
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="50"
+            android:layout_weight="80"
             android:text=""
+
             android:textSize="25dp"
             app:customTypeface="headingBold"
             tools:ignore="MissingPrefix"

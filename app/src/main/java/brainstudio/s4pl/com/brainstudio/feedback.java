@@ -82,6 +82,7 @@ import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMembers;
 
 
+import static android.Manifest.permission.LOCATION_HARDWARE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -433,7 +434,7 @@ public class feedback extends AppCompatActivity  {
         course = courseList.get(courseSpinner.getSelectedIndex());
         centre = centreList.get(centreSpinner.getSelectedIndex());
         Log.v("feed", "centre=" + centre);
-        String timeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + "";
+        String timeStamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + "R" + (int)(Math.random()*1000);
         final DatabaseReference each;
         feedbackRef.child(timeStamp).push();
         each = feedbackRef.child(timeStamp);
